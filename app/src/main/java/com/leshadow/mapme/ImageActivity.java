@@ -5,14 +5,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.media.ExifInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 public class ImageActivity extends AppCompatActivity {
@@ -64,21 +68,44 @@ public class ImageActivity extends AppCompatActivity {
                 Uri imageUri = data.getData();
 
                 // declare a stream to read the image data from the SD Card
-                InputStream inputStream;
+                InputStream inputStream = null;
 
                 // we are getting an input stream, based on the URI of the image
                 try {
                     inputStream = getContentResolver().openInputStream(imageUri);
 
                     // get a bitmap from the stream
-                    Bitmap image = BitmapFactory.decodeStream(inputStream);
+                    //Bitmap image = BitmapFactory.decodeStream(inputStream);
 
                     // show the image to the user
-                    imgPicture.setImageBitmap(image);
+                    //imgPicture.setImageBitmap(image);
+
+                    // working with Exif
+                    ExifInterface exifInterface = new ExifInterface(inputStream);
+                    float[] latLong = new float[2];
+
+                    EditText latView = (EditText) findViewById(R.id.latNum);
+                    EditText longView = (EditText) findViewById(R.id.longNum);
+                    if(exifInterface.getLatLong(latLong)){
+                        latView.setText(Float.toString(latLong[0]));
+                        longView.setText(Float.toString(latLong[1]));
+                    } else{
+                        latView.setText("2");
+                        longView.setText("2");
+                    }
+
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                     // show a message to the user indicating the image is unavailable
                     Toast.makeText(this, "Unable to open image", Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    // Handle any errors
+                } finally {
+                    if (inputStream != null) {
+                        try {
+                            inputStream.close();
+                        } catch (IOException ignored) {}
+                    }
                 }
             }
         }

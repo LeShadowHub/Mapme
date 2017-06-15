@@ -20,4 +20,6 @@
         completions."
     </string>
     <string name="lblUploadImage">Upload</string>
+    <string name="latitude">Lat</string>
+    <string name="Longitude">Long</string>
 </resources>
