@@ -1,10 +1,13 @@
 package com.leshadow.mapme;
 
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.media.ExifInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -57,6 +60,15 @@ public class ImageActivity extends AppCompatActivity {
 
     }
 
+    private String getRealPathFromURI(Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        CursorLoader loader = new CursorLoader(this, contentUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK){
@@ -81,11 +93,19 @@ public class ImageActivity extends AppCompatActivity {
                     //imgPicture.setImageBitmap(image);
 
                     // working with Exif
+                    //String imagePath = getRealPathFromURI(imageUri);
                     ExifInterface exifInterface = new ExifInterface(inputStream);
+                    String lat = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
+                    String lon = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+
                     float[] latLong = new float[2];
 
                     EditText latView = (EditText) findViewById(R.id.latNum);
                     EditText longView = (EditText) findViewById(R.id.longNum);
+                    //latView.setText(lat);
+                    //longView.setText(lon);
+
+
                     if(exifInterface.getLatLong(latLong)){
                         latView.setText(Float.toString(latLong[0]));
                         longView.setText(Float.toString(latLong[1]));
