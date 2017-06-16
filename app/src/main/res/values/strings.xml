@@ -22,4 +22,5 @@
     <string name="lblUploadImage">Upload</string>
     <string name="latitude">Lat</string>
     <string name="Longitude">Long</string>
+    <string name="lblSend">Send</string>
 </resources>

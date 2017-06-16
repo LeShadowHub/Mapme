@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -109,6 +111,15 @@ public class ImageActivity extends AppCompatActivity {
                     if(exifInterface.getLatLong(latLong)){
                         latView.setText(Float.toString(latLong[0]));
                         longView.setText(Float.toString(latLong[1]));
+
+                        // Bundle latlon and send to mapActivity
+                        LatLng pos = new LatLng(latLong[0], latLong[1]);
+                        Bundle args = new Bundle();
+                        args.putParcelable("pos", pos);
+                        Intent posIntent = new Intent(ImageActivity.this, MapActivity.class);
+                        posIntent.putExtra("bundle", args);
+                        startActivity(posIntent);
+
                     } else{
                         latView.setText("2");
                         longView.setText("2");

@@ -13,6 +13,7 @@ import android.os.Bundle;
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    LatLng pos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        Bundle bundle = getIntent().getParcelableExtra("bundle");
+        pos = bundle.getParcelable("pos");
     }
 
     /**
@@ -45,8 +49,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         mMap = map;
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(33.113, -96.780);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //LatLng sydney = new LatLng(33.113, -96.780);
+        mMap.addMarker(new MarkerOptions().position(pos).title("Marker"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
     }
 }
