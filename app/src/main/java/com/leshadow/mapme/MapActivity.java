@@ -4,6 +4,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -11,10 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    Random rand = new Random();
     LatLng pos;
     ArrayList<LatLng> locs = new ArrayList<LatLng>();
 
@@ -51,18 +54,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
          */
     @Override
     public void onMapReady(GoogleMap map) {
-        //map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
-
         mMap = map;
-
-        // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(33.113, -96.780);
-        //mMap.addMarker(new MarkerOptions().position(pos).title("Marker"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
 
         // For multiple markers
         for(int i = 0; i < locs.size(); i++){
-            mMap.addMarker(new MarkerOptions().position(locs.get(i)));
+            mMap.addMarker(new MarkerOptions().position(locs.get(i)).icon(BitmapDescriptorFactory.defaultMarker(rand.nextInt(359)+1)));
         }
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(locs.get(locs.size()-1)));
     }
 }
