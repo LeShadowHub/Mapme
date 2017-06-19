@@ -45,7 +45,8 @@
         <activity android:name=".MapActivity" />
         <activity android:name=".ImageActivity" />
         <activity android:name=".CustomPhotoGalleryActivity" />
-        <activity android:name=".MainImagesActivity"></activity>
+        <activity android:name=".MainImagesActivity" />
+        <activity android:name=".CreateActivity"></activity>
     </application>
 
 </manifest>
