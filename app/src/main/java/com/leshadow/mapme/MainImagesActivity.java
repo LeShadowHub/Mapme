@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MainImagesActivity extends AppCompatActivity {
@@ -86,6 +87,7 @@ public class MainImagesActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         ArrayList<String> paths = new ArrayList<String>();
         ArrayList<LatLng> locs = new ArrayList<LatLng>();
+        ArrayList<Bitmap> images = new ArrayList<Bitmap>();
         InputStream inputStream = null;
         float[] latLong = new float[2];
 
@@ -108,6 +110,11 @@ public class MainImagesActivity extends AppCompatActivity {
                                         LatLng pos = new LatLng(latLong[0], latLong[1]);
                                         locs.add(pos);
                                     }
+
+                                    // Generate image bitmaps and put into arraylist
+                                    Bitmap image = BitmapFactory.decodeStream(inputStream);
+                                    images.add(image);
+
                                 } catch (FileNotFoundException e) {
                                     e.printStackTrace();
                                 } catch (IOException e) {
@@ -116,8 +123,12 @@ public class MainImagesActivity extends AppCompatActivity {
                             }
 
                             Intent posIntent = new Intent(MainImagesActivity.this, MapActivity.class);
-                            posIntent.putExtra("allPos", locs);
-                            startActivity(posIntent);
+                            posIntent.putParcelableArrayListExtra("allPos", locs);
+                            //startActivity(posIntent);
+
+                            Intent imageIntent = new Intent(MainImagesActivity.this, TripActivity.class);
+                            imageIntent.putParcelableArrayListExtra("Images", images);
+                            startActivity(imageIntent);
 
                         } else {
                             Uri imageUri = data.getData();
@@ -143,7 +154,7 @@ public class MainImagesActivity extends AppCompatActivity {
                                     locs.add(pos);
                                     Intent posIntent = new Intent(MainImagesActivity.this, MapActivity.class);
                                     posIntent.putParcelableArrayListExtra("allPos", locs);
-                                    startActivity(posIntent);
+                                    //startActivity(posIntent);
                                 }
 
                             } catch (FileNotFoundException e) {

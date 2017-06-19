@@ -46,7 +46,11 @@
         <activity android:name=".ImageActivity" />
         <activity android:name=".CustomPhotoGalleryActivity" />
         <activity android:name=".MainImagesActivity" />
-        <activity android:name=".CreateActivity"></activity>
+        <activity android:name=".CreateActivity" />
+        <activity
+            android:name=".TripActivity"
+            android:label="@string/title_activity_trip"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
