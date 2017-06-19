@@ -10,10 +10,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import java.util.ArrayList;
+
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     LatLng pos;
+    ArrayList<LatLng> locs = new ArrayList<LatLng>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +28,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        Bundle bundle = getIntent().getParcelableExtra("bundle");
-        pos = bundle.getParcelable("pos");
+        // For single photo selection
+        //Bundle bundle = getIntent().getParcelableExtra("bundle");
+        //pos = bundle.getParcelable("pos");
+
+        locs = getIntent().getParcelableArrayListExtra("allPos");
     }
 
     /**
@@ -48,9 +54,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         //map.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
 
         mMap = map;
+
         // Add a marker in Sydney and move the camera
         //LatLng sydney = new LatLng(33.113, -96.780);
-        mMap.addMarker(new MarkerOptions().position(pos).title("Marker"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
+        //mMap.addMarker(new MarkerOptions().position(pos).title("Marker"));
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
+
+        // For multiple markers
+        for(int i = 0; i < locs.size(); i++){
+            mMap.addMarker(new MarkerOptions().position(locs.get(i)));
+        }
     }
 }

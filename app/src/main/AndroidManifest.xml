@@ -43,7 +43,9 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".MapActivity" />
-        <activity android:name=".ImageActivity"></activity>
+        <activity android:name=".ImageActivity" />
+        <activity android:name=".CustomPhotoGalleryActivity" />
+        <activity android:name=".MainImagesActivity"></activity>
     </application>
 
 </manifest>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.leshadow.mapme.MainImagesActivity">
+
+    <Button
+        android:id="@+id/btnAddImages"
+        android:layout_width="119dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="16dp"
+        android:onClick="onAddClicked"
+        android:text="@string/lblAddImages"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/btnSaveImages"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteY="17dp" />
+
+    <Button
+        android:id="@+id/btnSaveImages"
+        android:layout_width="119dp"
+        android:layout_height="54dp"
+        android:text="@string/lblSaveImages"
+        app:layout_constraintBaseline_toBaselineOf="@+id/btnAddImages"
+        app:layout_constraintLeft_toRightOf="@+id/btnAddImages"
+        app:layout_constraintRight_toRightOf="parent" />
+</android.support.constraint.ConstraintLayout>

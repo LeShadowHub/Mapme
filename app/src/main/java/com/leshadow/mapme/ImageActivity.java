@@ -97,8 +97,8 @@ public class ImageActivity extends AppCompatActivity {
                     // working with Exif
                     //String imagePath = getRealPathFromURI(imageUri);
                     ExifInterface exifInterface = new ExifInterface(inputStream);
-                    String lat = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
-                    String lon = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+                    //String lat = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
+                    //String lon = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
 
                     float[] latLong = new float[2];
 

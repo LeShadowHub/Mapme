@@ -7,14 +7,14 @@
     tools:context="com.leshadow.mapme.ImageActivity">
 
     <Button
-        android:id="@+id/btnImageGallery"
+        android:id="@+id/btnSaveImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Button"
+        android:text="@string/lblSaveImage"
+        app:layout_constraintLeft_toRightOf="@+id/btnUploadImage"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/btnUploadImage" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnUploadImage"
@@ -26,7 +26,7 @@
         android:onClick="onUploadClicked"
         android:text="@string/lblUploadImage"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/btnImageGallery"
+        app:layout_constraintRight_toLeftOf="@+id/btnSaveImage"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
