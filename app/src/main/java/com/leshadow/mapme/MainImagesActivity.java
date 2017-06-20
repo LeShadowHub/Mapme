@@ -1,6 +1,7 @@
 package com.leshadow.mapme;
 
 import android.content.ClipData;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
@@ -23,8 +24,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Array;
@@ -33,12 +36,13 @@ import java.util.ArrayList;
 public class MainImagesActivity extends AppCompatActivity {
 
     public static final int IMAGE_GALLERY_REQUEST = 20;
-    private ImageView imgPicture;
+    private ImageView pic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_images);
+        pic = (ImageView) findViewById(R.id.pic);
     }
     /**
      * This method is invoked when the user click upload button
@@ -87,8 +91,10 @@ public class MainImagesActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         ArrayList<String> paths = new ArrayList<String>();
         ArrayList<LatLng> locs = new ArrayList<LatLng>();
-        ArrayList<Bitmap> images = new ArrayList<Bitmap>();
+        ArrayList<Uri> imgUri = new ArrayList<Uri>();
+        String fileName = "myImage";
         InputStream inputStream = null;
+        FileOutputStream fo = null;
         float[] latLong = new float[2];
 
         if(resultCode == RESULT_OK){
@@ -103,32 +109,61 @@ public class MainImagesActivity extends AppCompatActivity {
                             for (int i = 0; i < clipData.getItemCount(); i++) {
                                 ClipData.Item item = clipData.getItemAt(i);
                                 Uri uri = item.getUri();
-                                try {
+                                imgUri.add(uri);
+                                /*try {
                                     inputStream = getContentResolver().openInputStream(uri);
-                                    android.support.media.ExifInterface exifInterface = new android.support.media.ExifInterface(inputStream);
-                                    if(exifInterface.getLatLong(latLong)){
-                                        LatLng pos = new LatLng(latLong[0], latLong[1]);
-                                        locs.add(pos);
-                                    }
+                                    //android.support.media.ExifInterface exifInterface = new android.support.media.ExifInterface(inputStream);
+                                    //if(exifInterface.getLatLong(latLong)){
+                                    //    LatLng pos = new LatLng(latLong[0], latLong[1]);
+                                    //    locs.add(pos);
+                                    //}
 
                                     // Generate image bitmaps and put into arraylist
                                     Bitmap image = BitmapFactory.decodeStream(inputStream);
-                                    images.add(image);
+                                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                                    image.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                                    fo = openFileOutput(fileName, Context.MODE_PRIVATE);
+                                    fo.write(bytes.toByteArray());
 
                                 } catch (FileNotFoundException e) {
                                     e.printStackTrace();
                                 } catch (IOException e) {
                                     e.printStackTrace();
-                                }
+                                } finally {
+                                    if (inputStream != null) {
+                                        try {
+                                            inputStream.close();
+                                        } catch (IOException ignored) {
+                                        }
+                                    }
+                                    if(fo != null){
+                                        try {
+                                            fo.close();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }*/
                             }
 
-                            Intent posIntent = new Intent(MainImagesActivity.this, MapActivity.class);
-                            posIntent.putParcelableArrayListExtra("allPos", locs);
+                            //Testing single image
+                            /*Bitmap bitmap = null;
+                            try {
+                                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imgUri.get(0));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            pic.setImageBitmap(bitmap);*/
+                            //pic.setImageBitmap(images.get(0));
+
+                            //Intent posIntent = new Intent(MainImagesActivity.this, MapActivity.class);
+                            //posIntent.putParcelableArrayListExtra("allPos", locs);
                             //startActivity(posIntent);
 
-                            Intent imageIntent = new Intent(MainImagesActivity.this, TripActivity.class);
-                            imageIntent.putParcelableArrayListExtra("Images", images);
-                            startActivity(imageIntent);
+
+                            Intent tripIntent = new Intent(MainImagesActivity.this, TripActivity.class);
+                            tripIntent.putParcelableArrayListExtra("Images", imgUri);
+                            startActivity(tripIntent);
 
                         } else {
                             Uri imageUri = data.getData();

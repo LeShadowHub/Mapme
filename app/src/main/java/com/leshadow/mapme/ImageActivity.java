@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -35,7 +34,7 @@ public class ImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_image);
 
         // gt a reference to the image view that holds the image that the user will see
-        imgPicture = (ImageView) findViewById(R.id.imgPicture);
+        imgPicture = (ImageView) findViewById(R.id.pic);
 
 
     }
@@ -88,11 +87,7 @@ public class ImageActivity extends AppCompatActivity {
                 try {
                     inputStream = getContentResolver().openInputStream(imageUri);
 
-                    // get a bitmap from the stream
-                    //Bitmap image = BitmapFactory.decodeStream(inputStream);
 
-                    // show the image to the user
-                    //imgPicture.setImageBitmap(image);
 
                     // working with Exif
                     //String imagePath = getRealPathFromURI(imageUri);
@@ -118,12 +113,18 @@ public class ImageActivity extends AppCompatActivity {
                         args.putParcelable("pos", pos);
                         Intent posIntent = new Intent(ImageActivity.this, MapActivity.class);
                         posIntent.putExtra("bundle", args);
-                        startActivity(posIntent);
+                        //startActivity(posIntent);
 
                     } else{
                         latView.setText("2");
                         longView.setText("2");
                     }
+                    // get a bitmap from the stream
+                    inputStream = getContentResolver().openInputStream(imageUri);
+                    Bitmap image = BitmapFactory.decodeStream(inputStream);
+
+                    // show the image to the user
+                    imgPicture.setImageBitmap(image);
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
