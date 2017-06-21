@@ -23,8 +23,20 @@
         android:id="@+id/btnSaveImages"
         android:layout_width="119dp"
         android:layout_height="54dp"
+        android:onClick="onSaveClicked"
         android:text="@string/lblSaveImages"
         app:layout_constraintBaseline_toBaselineOf="@+id/btnAddImages"
         app:layout_constraintLeft_toRightOf="@+id/btnAddImages"
         app:layout_constraintRight_toRightOf="parent" />
+
+    <ImageView
+        android:id="@+id/pic"
+        android:layout_width="119dp"
+        android:layout_height="97dp"
+        android:layout_marginTop="42dp"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnAddImages"
+        app:srcCompat="@drawable/ic_dialog_close_dark" />
 </android.support.constraint.ConstraintLayout>

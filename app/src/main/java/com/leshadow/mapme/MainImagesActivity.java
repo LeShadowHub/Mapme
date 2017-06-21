@@ -66,6 +66,11 @@ public class MainImagesActivity extends AppCompatActivity {
         }
     }
 
+    public void onSaveClicked(View v){
+        Intent intent = new Intent(MainImagesActivity.this, TripActivity.class);
+        startActivity(intent);
+    }
+
     private String getRealPathFromURI(Uri contentUri) {
         Cursor cursor = null;
         try {
@@ -86,6 +91,7 @@ public class MainImagesActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         ArrayList<String> paths = new ArrayList<String>();
         ArrayList<LatLng> locs = new ArrayList<LatLng>();
+        ArrayList<Uri> imgUri = new ArrayList<Uri>();
         InputStream inputStream = null;
         float[] latLong = new float[2];
 
@@ -101,7 +107,9 @@ public class MainImagesActivity extends AppCompatActivity {
                             for (int i = 0; i < clipData.getItemCount(); i++) {
                                 ClipData.Item item = clipData.getItemAt(i);
                                 Uri uri = item.getUri();
-                                try {
+                                imgUri.add(uri);
+
+                                /*try {
                                     inputStream = getContentResolver().openInputStream(uri);
                                     android.support.media.ExifInterface exifInterface = new android.support.media.ExifInterface(inputStream);
                                     if(exifInterface.getLatLong(latLong)){
@@ -112,12 +120,12 @@ public class MainImagesActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 } catch (IOException e) {
                                     e.printStackTrace();
-                                }
+                                }*/
                             }
 
-                            Intent posIntent = new Intent(MainImagesActivity.this, MapActivity.class);
-                            posIntent.putExtra("allPos", locs);
-                            startActivity(posIntent);
+                            Intent tripIntent = new Intent(MainImagesActivity.this, TripActivity.class);
+                            tripIntent.putParcelableArrayListExtra("Images", imgUri);
+                            startActivity(tripIntent);
 
                         } else {
                             Uri imageUri = data.getData();
@@ -143,7 +151,7 @@ public class MainImagesActivity extends AppCompatActivity {
                                     locs.add(pos);
                                     Intent posIntent = new Intent(MainImagesActivity.this, MapActivity.class);
                                     posIntent.putParcelableArrayListExtra("allPos", locs);
-                                    startActivity(posIntent);
+                                    //startActivity(posIntent);
                                 }
 
                             } catch (FileNotFoundException e) {
