@@ -27,14 +27,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.leshadow.mapme.MainActivity" />
-        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -47,7 +39,10 @@
         <activity android:name=".ImageActivity" />
         <activity android:name=".CustomPhotoGalleryActivity" />
         <activity android:name=".MainImagesActivity" />
-        <activity android:name=".TripActivity"></activity>
+        <activity android:name=".TripActivity" />
+        <activity android:name=".LoginAccountActivity" />
+        <activity android:name=".RegisterAccountActivity" />
+        <activity android:name=".LoginSuccessActivity"></activity>
     </application>
 
 </manifest>
