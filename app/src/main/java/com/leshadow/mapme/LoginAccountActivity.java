@@ -54,10 +54,12 @@ public class LoginAccountActivity extends AppCompatActivity {
                         //Retrieving User Fullname and Email after successfull login and passing to LoginSuccessActivity
                         String _fname = cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.COLUMN_FULLNAME));
                         String _email = cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.COLUMN_EMAIL));
+                        int _id = cursor.getInt(cursor.getColumnIndex(SQLiteDBHelper.COLUMN_ID));
                         Toast.makeText(LoginAccountActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginAccountActivity.this, LoginSuccessActivity.class);
                         intent.putExtra("fullname", _fname);
                         intent.putExtra("email", _email);
+                        intent.putExtra("id", _id);
                         startActivity(intent);
 
                         //Removing activity from the stack for preventing back button press

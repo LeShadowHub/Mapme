@@ -19,6 +19,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_EMAIL = "email";
     public static final String COLUMN_PASSWORD = "password";
     public static final String COLUMNG_MOBILE = "mobile";
+    public static final String COLUMN_IMAGE = "image";
 
     private static final String CREATE_TABLE_QUERY =
                     "CREATE TABLE " + TABLE_NAME + "  (" +
@@ -26,6 +27,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                     COLUMN_FULLNAME + " TEXT, " +
                     COLUMN_EMAIL + " TEXT, " +
                     COLUMN_PASSWORD + " TEXT, " +
+                    COLUMN_IMAGE + " TEXT, " +
                     COLUMNG_MOBILE + " TEXT " + ") ";
 
     //modified constructor
@@ -40,7 +42,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1){
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion){
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
