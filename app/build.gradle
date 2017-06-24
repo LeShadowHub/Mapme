@@ -34,5 +34,6 @@ dependencies {
     compile 'com.pkmmte.view:circularimageview:1.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.android.volley:volley:1.0.0'
+    compile 'com.mcxiaoke.volley:library:1.0.19'
     testCompile 'junit:junit:4.12'
 }

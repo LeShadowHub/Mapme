@@ -45,7 +45,9 @@
         <activity android:name=".LoginSuccessActivity" />
         <activity android:name=".ServerLoginActivity" />
         <activity android:name=".ServerRegisterActivity" />
-        <activity android:name=".ServerUserAreaActivity"></activity>
+        <activity android:name=".ServerUserAreaActivity" />
+        <activity android:name=".LocalServerLoginActivity" />
+        <activity android:name=".LocalServerUserAreaActivity"></activity>
     </application>
 
 </manifest>
