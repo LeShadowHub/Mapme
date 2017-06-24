@@ -25,7 +25,7 @@ public class ServerUserAreaActivity extends AppCompatActivity {
         String username = intent.getStringExtra("username");
         int age = intent.getIntExtra("age", 0);
 
-        String message = name + " welcome to your user area";
+        String message = name + ", welcome to your user area";
         welcomeMessage.setText(message);
         etUsername.setText(username);
         etAge.setText(age + "");

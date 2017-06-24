@@ -12,7 +12,8 @@ import java.util.Map;
  */
 
 public class ServerLoginRequest extends StringRequest{
-    private static final String LOGIN_REQUEST_URL = "http://192.168.2.102:801/mapme2/Login.php";
+    //private static final String LOGIN_REQUEST_URL = "http://192.168.2.102:801/mapme2/Login.php";
+    private static final String LOGIN_REQUEST_URL = "https://leshadow.com/Login.php";
     private Map<String, String> params;
 
     public ServerLoginRequest(String username, String password, Response.Listener<String> listener){

@@ -11,7 +11,8 @@ import java.util.Map;
  */
 
 public class ServerRegisterRequest extends StringRequest{
-    private static final String REGISTER_REQUEST_URL = "http://192.168.2.102:801/mapme2/Register.php";
+    //private static final String REGISTER_REQUEST_URL = "http://192.168.2.102:801/mapme2/Register.php";
+    private static final String REGISTER_REQUEST_URL = "https://leshadow.com/Register.php";
     private Map<String, String> params;
 
     public ServerRegisterRequest(String name, String username, int age, String password, Response.Listener<String> listener){
