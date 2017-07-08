@@ -51,7 +51,8 @@
         <activity
             android:name=".TripActivity"
             android:label="@string/title_activity_trip"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".StoreImageActivity"></activity>
     </application>
 
 </manifest>
