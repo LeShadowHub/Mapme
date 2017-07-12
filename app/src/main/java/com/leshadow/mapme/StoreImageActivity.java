@@ -58,7 +58,11 @@ public class StoreImageActivity extends AppCompatActivity {
                 if(filePath != null) {
                     pd.show();
 
-                    StorageReference childRef = storageRef.child("image.jpg");
+                    StorageReference childRef = null;
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                        //childRef = storageRef.child("Testing/image" + View.generateViewId() + ".jpg");
+                        childRef = storageRef.child("image5.jpg");
+                    }
 
                     //uploading the image
                     UploadTask uploadTask = childRef.putFile(filePath);
