@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         if(login){
-            Intent loginIntent = new Intent(MainActivity.this, ServerLoginActivity.class);
+            Intent loginIntent = new Intent(MainActivity.this, StoreImageActivity.class);
             startActivity(loginIntent);
         }
 
