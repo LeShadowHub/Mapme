@@ -125,7 +125,7 @@ public class MainImagesActivity extends AppCompatActivity {
 
                             Intent tripIntent = new Intent(MainImagesActivity.this, TripActivity.class);
                             tripIntent.putParcelableArrayListExtra("Images", imgUri);
-                            startActivity(tripIntent);
+                            //startActivity(tripIntent);
 
                         } else {
                             Uri imageUri = data.getData();
@@ -151,7 +151,7 @@ public class MainImagesActivity extends AppCompatActivity {
                                     locs.add(pos);
                                     Intent posIntent = new Intent(MainImagesActivity.this, MapActivity.class);
                                     posIntent.putParcelableArrayListExtra("allPos", locs);
-                                    //startActivity(posIntent);
+                                    startActivity(posIntent);
                                 }
 
                             } catch (FileNotFoundException e) {

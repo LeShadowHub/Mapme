@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.media.ExifInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -27,7 +31,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class StoreImageActivity extends AppCompatActivity {
     Button chooseImg, uploadImg;
@@ -35,6 +41,10 @@ public class StoreImageActivity extends AppCompatActivity {
     int PICK_IMAGE_REQUEST = 111;
     Uri filePath;
     ProgressDialog pd;
+    int num = 1;
+    float[] latLong = new float[2];
+    float lat = 0;
+    float lon = 0;
 
     //creating reference to firebase storage
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -43,8 +53,8 @@ public class StoreImageActivity extends AppCompatActivity {
 
     //creating reference to firebase database
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("message");
-
+    DatabaseReference myRef = database.getReference("Trip1");
+    DatabaseReference imageNum = database.getReference("Trip1/image number");
 
 
     @Override
@@ -59,13 +69,14 @@ public class StoreImageActivity extends AppCompatActivity {
         pd = new ProgressDialog(this);
         pd.setMessage("Uploading....");
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        //Track image number
+        imageNum.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("RETURNED", dataSnapshot.getValue(String.class));
-
-                //Create tempRef and use Glide to download and display image
-
+                if(dataSnapshot.getValue(Integer.class) != null){
+                    num = dataSnapshot.getValue(Integer.class);
+                    Log.w("NUMBER", dataSnapshot.getValue(Integer.class).toString());
+                }
             }
 
             @Override
@@ -73,6 +84,28 @@ public class StoreImageActivity extends AppCompatActivity {
                 Log.w("ERROR", databaseError.toException());
             }
         });
+
+        /*myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.getValue(String.class) != null){
+                    Log.d("RETURNED", dataSnapshot.getValue(String.class));
+
+                    //Create tempRef and use Glide to download and display image
+                    StorageReference httpRef = storage.getReferenceFromUrl(dataSnapshot.getValue(String.class));
+                    Glide.with(StoreImageActivity.this)
+                            .using(new FirebaseImageLoader())
+                            .load(httpRef)
+                            .into(imgView2);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("ERROR", databaseError.toException());
+            }
+        });*/
 
 
         chooseImg.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +126,8 @@ public class StoreImageActivity extends AppCompatActivity {
 
                     String imageName = "Trip1/image.jpg";
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                        imageName = "Trip1/image" + View.generateViewId() + ".jpg";
+                        imageName = "Trip1/image" + num + ".jpg";
+
                     }
 
                     StorageReference childRef = storageRef.child(imageName);
@@ -107,8 +141,17 @@ public class StoreImageActivity extends AppCompatActivity {
                             pd.dismiss();
                             Toast.makeText(StoreImageActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
                             Log.d("URI", taskSnapshot.getDownloadUrl().toString());
-                            myRef.setValue(taskSnapshot.getDownloadUrl().toString());
+                            myRef.child("card" + num + "/image").setValue(taskSnapshot.getDownloadUrl().toString());
 
+                            try {
+                                myRef.child("card" + num + "/latitude").setValue(lat);
+                                myRef.child("card" + num + "/longitude").setValue(lon);
+                            } catch(Exception e){
+                                Log.e("ERROR", "No lat or long found");
+                                e.printStackTrace();
+                            }
+                            num++;
+                            imageNum.setValue(num);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -150,6 +193,22 @@ public class StoreImageActivity extends AppCompatActivity {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             filePath = data.getData();
+
+            //Getting lat and long
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(filePath);
+                ExifInterface exifInterface = new ExifInterface(inputStream);
+                if(exifInterface.getLatLong(latLong)){
+                    lat = latLong[0];
+                    lon = latLong[1];
+                }
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
 
             try {
                 //getting image from gallery
