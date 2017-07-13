@@ -34,9 +34,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class StoreImageActivity extends AppCompatActivity {
-    Button chooseImg, uploadImg;
+    Button chooseImg, uploadImg, mapImg;
     ImageView imgView, imgView2;
     int PICK_IMAGE_REQUEST = 111;
     Uri filePath;
@@ -45,6 +46,7 @@ public class StoreImageActivity extends AppCompatActivity {
     float[] latLong = new float[2];
     float lat = 0;
     float lon = 0;
+    ArrayList<LatLng> locs = new ArrayList<LatLng>();
 
     //creating reference to firebase storage
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -64,7 +66,8 @@ public class StoreImageActivity extends AppCompatActivity {
         chooseImg = (Button)findViewById(R.id.chooseImg);
         uploadImg = (Button)findViewById(R.id.uploadImg);
         imgView = (ImageView)findViewById(R.id.imgView);
-        imgView2 = (ImageView)findViewById(R.id.imgView2);
+        //imgView2 = (ImageView)findViewById(R.id.imgView2);
+        mapImg = (Button)findViewById(R.id.mapImg);
 
         pd = new ProgressDialog(this);
         pd.setMessage("Uploading....");
@@ -107,6 +110,19 @@ public class StoreImageActivity extends AppCompatActivity {
             }
         });*/
 
+
+        mapImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(locs.size() > 0){
+                    Intent posIntent = new Intent(StoreImageActivity.this, MapActivity.class);
+                    posIntent.putParcelableArrayListExtra("allPos", locs);
+                    startActivity(posIntent);
+                } else{
+                    Toast.makeText(StoreImageActivity.this, "No Latitude and Longitude Found", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         chooseImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,6 +217,13 @@ public class StoreImageActivity extends AppCompatActivity {
                 if(exifInterface.getLatLong(latLong)){
                     lat = latLong[0];
                     lon = latLong[1];
+                }
+
+                if(lat == 0 && lon == 0){
+                    Toast.makeText(StoreImageActivity.this, "No Latitude and Longitude Found", Toast.LENGTH_SHORT).show();
+                } else{
+                    LatLng pos = new LatLng(lat, lon);
+                    locs.add(pos);
                 }
 
             } catch (FileNotFoundException e) {
