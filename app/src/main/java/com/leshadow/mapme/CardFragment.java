@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +20,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 
@@ -37,22 +48,54 @@ public class CardFragment extends Fragment{
     DatabaseReference myRef = database.getReference("Kevin/Trip1");
     DatabaseReference imageNum = database.getReference("Kevin/Trip1/image number");
 
-
+    String Wonders[] = {"Chichen Itza","Christ the Redeemer","Great Wall of China","Machu Picchu","Petra","Taj Mahal","Colosseum"};
+    int Images[] = {R.drawable.chichen_itza,R.drawable.christ_the_redeemer,R.drawable.great_wall_of_china,R.drawable.machu_picchu,R.drawable.petra,R.drawable.taj_mahal,R.drawable.colosseum};
     ArrayList<CardModel> listitems = new ArrayList<>();
     RecyclerView MyRecyclerView;
 
-    ArrayList<String> Titles = new ArrayList<>();
-    ArrayList<Integer> ImagesArray = new ArrayList<>();
-
-    String Wonders[] = {"Chichen Itza","Christ the Redeemer","Great Wall of China","Machu Picchu","Petra","Taj Mahal","Colosseum"};
-    int  Images[] = {R.drawable.chichen_itza,R.drawable.christ_the_redeemer,R.drawable.great_wall_of_china,R.drawable.machu_picchu,R.drawable.petra,R.drawable.taj_mahal,R.drawable.colosseum};
+    ArrayList<String> imagePaths = new ArrayList<>();
+    int num;
+    MyAdapter myAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitles();
-        initializeList();
+
         getActivity().setTitle("My Adventure");
+
+
+        //Track image number
+        imageNum.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue(Integer.class) != null){
+                    num = dataSnapshot.getValue(Integer.class);
+                    //Log.w("NUMBER", dataSnapshot.getValue(Integer.class).toString());
+
+                    for(int i = 1; i < num; i++){
+                        imagePaths.add(getImageURI(i));
+                    }
+
+
+                    //Log.d("LIST", Integer.toString(listitems.size()));
+                    //Log.d("CHECK", "Finished with OnCreate");
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("ERROR", databaseError.toException());
+            }
+        });
+
+
+        Log.w("NUMBER", Integer.toString(num));
+        initializeList(num);
+        myAdapter = new MyAdapter(listitems);
+        //getImageURI(1);
+
+
     }
 
     @Override
@@ -60,14 +103,15 @@ public class CardFragment extends Fragment{
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_card, container, false);
-        MyRecyclerView = (RecyclerView) view.findViewById(R.id.cardView);
-        //MyRecyclerView.setHasFixedSize(true);
+
         LinearLayoutManager MyLayoutManager = new LinearLayoutManager(getActivity());
         MyLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        if (listitems.size() > 0 & MyRecyclerView != null) {
-            MyRecyclerView.setAdapter(new MyAdapter(listitems));
-        }
+
+        Log.d("LISTSIZE", "Reached onCreateView");
+        MyRecyclerView = (RecyclerView) view.findViewById(R.id.cardView);
+        //MyRecyclerView.setHasFixedSize(true);
         MyRecyclerView.setLayoutManager(MyLayoutManager);
+        MyRecyclerView.setAdapter(myAdapter);
 
         return view;
     }
@@ -95,9 +139,9 @@ public class CardFragment extends Fragment{
 
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
-            //holder.titleTextView.setText(list.get(position).getCardName());
-            //holder.coverImageView.setImageResource(list.get(position).getImageResourceId());
-            //holder.coverImageView.setTag(list.get(position).getImageResourceId());
+            holder.titleTextView.setText(list.get(position).getCardTitle());
+            holder.coverImageView.setImageResource(list.get(position).getImagePath());
+            holder.coverImageView.setTag(list.get(position).getImagePath());
             holder.likeImageView.setTag(R.drawable.ic_like);
         }
 
@@ -156,22 +200,37 @@ public class CardFragment extends Fragment{
         }
     }
 
-    public void setTitles(){
-        for(int i = 1; i <= 100; i++){
-            Titles.add("Image " + i);
+
+    public void initializeList(int num) {
+        listitems.clear();
+
+        //Log.d("NUMINLIST", Integer.toString(num));
+        for(int i = 0; i < num; i++){
+            CardModel item = new CardModel();
+            item.setCardTitle(Wonders[i]);
+            item.setImagePath(Images[i]);
+            item.setIsfav(0);
+            item.setIsturned(0);
+            listitems.add(item);
         }
     }
 
-    public void initializeList() {
-        listitems.clear();
+    public String getImageURI(int num){
+        final String[] path = {""};
+        myRef.child("card" + num + "/image").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("IMAGEPATH", dataSnapshot.getValue(String.class));
+                path[0] = dataSnapshot.getValue(String.class);
+            }
 
-        for(int i =0;i<7;i++){
-            //CardModel item = new CardModel();
-            //item.setCardName(Wonders[i]);
-            //item.setImageResourceId(Images[i]);
-            //item.setIsfav(0);
-            //item.setIsturned(0);
-            //listitems.add(item);
-        }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("ERROR", "Cannot acquire image path");
+                databaseError.toException().printStackTrace();
+
+            }
+        });
+        return path[0];
     }
 }

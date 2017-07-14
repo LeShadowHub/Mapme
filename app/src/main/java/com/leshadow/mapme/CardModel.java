@@ -6,17 +6,24 @@ package com.leshadow.mapme;
 
 public class CardModel {
     String cardTitle;
-    String imagePath;
+    int imagePath;
     String desc;
+    int isfav;
+    int isturned;
 
+    public CardModel(){
+        cardTitle = "";
+        imagePath = 0;
+        desc = "";
+    }
 
-    public CardModel(String cardTitle, String imagePath, String desc){
+    public CardModel(String cardTitle, int imagePath, String desc){
         this.cardTitle = cardTitle;
         this.imagePath = imagePath;
         this.desc = desc;
     }
 
-    public String getcardTitle() {
+    public String getCardTitle() {
         return cardTitle;
     }
 
@@ -24,11 +31,11 @@ public class CardModel {
         this.cardTitle = cardTitle;
     }
 
-    public String getImagePath() {
+    public int getImagePath() {
         return imagePath;
     }
 
-    public void setImagePath(String imagePath) {
+    public void setImagePath(int imagePath) {
         this.imagePath = imagePath;
     }
 
@@ -38,5 +45,21 @@ public class CardModel {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public int getIsturned() {
+        return isturned;
+    }
+
+    public void setIsturned(int isturned) {
+        this.isturned = isturned;
+    }
+
+    public int getIsfav() {
+        return isfav;
+    }
+
+    public void setIsfav(int isfav) {
+        this.isfav = isfav;
     }
 }

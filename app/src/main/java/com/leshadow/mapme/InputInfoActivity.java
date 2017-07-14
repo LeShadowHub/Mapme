@@ -10,8 +10,21 @@ import android.widget.EditText;
 import android.widget.Scroller;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 public class InputInfoActivity extends AppCompatActivity {
 
+    //creating reference to firebase storage
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReference();
+
+    //creating reference to firebase database
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("Kevin/Trip1");
+    DatabaseReference imageNum = database.getReference("Kevin/Trip1/image number");
     public String title;
     public String desc;
 
