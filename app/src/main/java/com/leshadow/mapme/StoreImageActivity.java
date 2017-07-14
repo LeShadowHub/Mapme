@@ -55,8 +55,8 @@ public class StoreImageActivity extends AppCompatActivity {
 
     //creating reference to firebase database
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("Trip1");
-    DatabaseReference imageNum = database.getReference("Trip1/image number");
+    DatabaseReference myRef = database.getReference("Kevin/Trip1");
+    DatabaseReference imageNum = database.getReference("Kevin/Trip1/image number");
 
 
     @Override
@@ -140,9 +140,9 @@ public class StoreImageActivity extends AppCompatActivity {
                 if(filePath != null) {
                     pd.show();
 
-                    String imageName = "Trip1/image.jpg";
+                    String imageName = "Kevin/Trip1/image.jpg";
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                        imageName = "Trip1/image" + num + ".jpg";
+                        imageName = "Kevin/Trip1/image" + num + ".jpg";
 
                     }
 

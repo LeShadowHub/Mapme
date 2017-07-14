@@ -48,7 +48,9 @@
         <activity android:name=".ServerUserAreaActivity" />
         <activity android:name=".LocalServerLoginActivity" />
         <activity android:name=".LocalServerUserAreaActivity" />
-        <activity android:name=".StoreImageActivity"></activity>
+        <activity android:name=".StoreImageActivity" />
+        <activity android:name=".UserViewActivity" />
+        <activity android:name=".InputInfoActivity"></activity>
     </application>
 
 </manifest>

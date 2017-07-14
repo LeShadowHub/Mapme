@@ -118,4 +118,5 @@
     </string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="title_activity_trip">TripActivity</string>
+    <string name="send_to">Share</string>
 </resources>
