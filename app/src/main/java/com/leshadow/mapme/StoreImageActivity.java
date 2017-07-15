@@ -59,8 +59,6 @@ public class StoreImageActivity extends AppCompatActivity {
     //creating reference to firebase database
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("Kevin/Trip1");
-    //DatabaseReference imageNum = database.getReference("Kevin/Trip1/image number");
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
