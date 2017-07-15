@@ -50,7 +50,8 @@
         <activity android:name=".LocalServerUserAreaActivity" />
         <activity android:name=".StoreImageActivity" />
         <activity android:name=".UserViewActivity" />
-        <activity android:name=".InputInfoActivity"></activity>
+        <activity android:name=".InputInfoActivity" />
+        <activity android:name=".ImageInfoActivity"></activity>
     </application>
 
 </manifest>

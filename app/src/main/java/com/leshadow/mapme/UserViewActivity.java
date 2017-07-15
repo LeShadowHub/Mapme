@@ -35,6 +35,8 @@ public class UserViewActivity extends AppCompatActivity {
     //list to hold all the uploaded cards;
     private List<CardModel> cards;
 
+    String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +49,12 @@ public class UserViewActivity extends AppCompatActivity {
         pd = new ProgressDialog(this);
         cards = new ArrayList<>();
 
+        username = getIntent().getStringExtra("username");
+
         //displaying progress dialog while fetching images
         pd.setMessage("Please wait...");
         pd.show();
-        mDatabase = FirebaseDatabase.getInstance().getReference("Kevin/Trip1");
+        mDatabase = FirebaseDatabase.getInstance().getReference(username + "/Trip1");
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override

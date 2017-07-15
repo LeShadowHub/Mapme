@@ -50,15 +50,16 @@ public class StoreImageActivity extends AppCompatActivity {
     float lon = 0;
     ArrayList<LatLng> locs = new ArrayList<LatLng>();
     ProgressDialog pd;
+    String username;
 
     //creating reference to firebase storage
     FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageRef = storage.getReference("Kevin/Trip1");
+    StorageReference storageRef;
     //StorageReference storageRef = storage.getReferenceFromUrl("gs://projectweb-92615.appspot.com"); //change the url according to your firebase app
 
     //creating reference to firebase database
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("Kevin/Trip1");
+    DatabaseReference myRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,11 @@ public class StoreImageActivity extends AppCompatActivity {
         imgView = (ImageView)findViewById(R.id.imgView);
         mapImg = (Button)findViewById(R.id.mapImg);
         viewImg = (Button)findViewById(R.id.viewImg);
+
+        username = getIntent().getStringExtra("username");
+        storageRef = storage.getReference(username + "/Trip1");
+        myRef = database.getReference(username + "/Trip1");
+
 
         pd = new ProgressDialog(this);
         pd.setTitle("Uploading");
@@ -115,6 +121,7 @@ public class StoreImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(StoreImageActivity.this, UserViewActivity.class);
+                intent.putExtra("username", username);
                 startActivity(intent);
             }
         });
@@ -164,18 +171,17 @@ public class StoreImageActivity extends AppCompatActivity {
                             CardModel card = new CardModel(taskSnapshot.getDownloadUrl().toString());
                             String uploadId = myRef.push().getKey();
                             card.setKey(uploadId);
-                            myRef.child(uploadId).setValue(card);
-                            //myRef.child("card" + num).setValue(card);
-
-                            /*try {
-                                myRef.child("card" + num + "/latitude").setValue(lat);
-                                myRef.child("card" + num + "/longitude").setValue(lon);
+                            card.setUsername(username);
+                            try {
+                                card.setLat(lat);
+                                card.setLon(lon);
                             } catch(Exception e){
                                 Log.e("ERROR", "No lat or long found");
                                 e.printStackTrace();
-                            }*/
+                            }
+                            myRef.child(uploadId).setValue(card);
                             num++;
-                            //imageNum.setValue(num);
+
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override

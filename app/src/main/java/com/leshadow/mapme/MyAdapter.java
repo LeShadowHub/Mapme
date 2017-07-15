@@ -3,10 +3,15 @@ package com.leshadow.mapme;
 /**
  * Created by OEM on 7/14/2017.
  */
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.renderscript.ScriptGroup;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,21 +42,26 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position){
-        CardModel card = cards.get(position);
+    public void onBindViewHolder(final MyViewHolder holder, final int position){
+        final CardModel card = cards.get(position);
         holder.titleTextView.setText(card.getTitle());
         Glide.with(context).load(card.getImage()).into(holder.coverImageView);
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "You Clicked the Card", Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "You Clicked the Card", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(v.getContext(), ImageInfoActivity.class);
+                intent.putExtra("CardObj", cards.get(position));
+                v.getContext().startActivity(intent);
+
             }
         });
 
         holder.settingView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(v.getContext(), InputInfoActivity.class);
                 intent.putExtra("CardObj", cards.get(position));
                 v.getContext().startActivity(intent);

@@ -27,7 +27,7 @@ public class InputInfoActivity extends AppCompatActivity {
 
     //creating reference to firebase database
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("Kevin/Trip1");
+    DatabaseReference myRef;
 
     CardModel card;
 
@@ -43,6 +43,7 @@ public class InputInfoActivity extends AppCompatActivity {
         etDesc.setMaxLines(5);
 
         card = (CardModel)getIntent().getSerializableExtra("CardObj");
+        myRef = database.getReference(card.getUsername() + "/Trip1");
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +61,7 @@ public class InputInfoActivity extends AppCompatActivity {
                     myRef.child(card.getKey()).setValue(card);
 
                     Intent intent = new Intent(InputInfoActivity.this, UserViewActivity.class);
+                    intent.putExtra("username", card.getUsername());
                     startActivity(intent);
                 }
 

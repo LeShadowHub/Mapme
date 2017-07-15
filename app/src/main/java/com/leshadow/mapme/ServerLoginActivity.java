@@ -52,10 +52,10 @@ public class ServerLoginActivity extends AppCompatActivity {
                                 String name = jsonResponse.getString("name");
                                 int age = jsonResponse.getInt("age");
 
-                                Intent intent = new Intent(ServerLoginActivity.this, ServerUserAreaActivity.class);
-                                intent.putExtra("name", name);
+                                Intent intent = new Intent(ServerLoginActivity.this, StoreImageActivity.class);
+                                //intent.putExtra("name", name);
                                 intent.putExtra("username", username);
-                                intent.putExtra("age", age);
+                                //intent.putExtra("age", age);
 
                                 startActivity(intent);
                             } else{
