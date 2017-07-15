@@ -1,6 +1,7 @@
 package com.leshadow.mapme;
 
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -27,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -41,22 +44,22 @@ public class StoreImageActivity extends AppCompatActivity {
     ImageView imgView, imgView2;
     int PICK_IMAGE_REQUEST = 111;
     Uri filePath;
-    ProgressDialog pd;
     int num = 1;
     float[] latLong = new float[2];
     float lat = 0;
     float lon = 0;
     ArrayList<LatLng> locs = new ArrayList<LatLng>();
+    ProgressDialog pd;
 
     //creating reference to firebase storage
     FirebaseStorage storage = FirebaseStorage.getInstance();
-    StorageReference storageRef = storage.getReference();
+    StorageReference storageRef = storage.getReference("Kevin/Trip1");
     //StorageReference storageRef = storage.getReferenceFromUrl("gs://projectweb-92615.appspot.com"); //change the url according to your firebase app
 
     //creating reference to firebase database
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("Kevin/Trip1");
-    DatabaseReference imageNum = database.getReference("Kevin/Trip1/image number");
+    //DatabaseReference imageNum = database.getReference("Kevin/Trip1/image number");
 
 
     @Override
@@ -70,10 +73,10 @@ public class StoreImageActivity extends AppCompatActivity {
         mapImg = (Button)findViewById(R.id.mapImg);
 
         pd = new ProgressDialog(this);
-        pd.setMessage("Uploading....");
+        pd.setTitle("Uploading");
 
         //Track image number
-        imageNum.addValueEventListener(new ValueEventListener() {
+        /*imageNum.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue(Integer.class) != null){
@@ -86,7 +89,7 @@ public class StoreImageActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
                 Log.w("ERROR", databaseError.toException());
             }
-        });
+        });*/
 
         /*myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -114,13 +117,15 @@ public class StoreImageActivity extends AppCompatActivity {
         mapImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(locs.size() > 0){
+                /*if(locs.size() > 0){
                     Intent posIntent = new Intent(StoreImageActivity.this, MapActivity.class);
                     posIntent.putParcelableArrayListExtra("allPos", locs);
                     startActivity(posIntent);
                 } else{
                     Toast.makeText(StoreImageActivity.this, "No Latitude and Longitude Found", Toast.LENGTH_SHORT).show();
-                }
+                }*/
+                Intent intent = new Intent(StoreImageActivity.this, UserViewActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -138,15 +143,10 @@ public class StoreImageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(filePath != null) {
+
                     pd.show();
 
-                    String imageName = "Kevin/Trip1/image.jpg";
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                        imageName = "Kevin/Trip1/image" + num + ".jpg";
-
-                    }
-
-                    StorageReference childRef = storageRef.child(imageName);
+                    StorageReference childRef = storageRef.child(System.currentTimeMillis() + "." + getFileExtension(filePath));
 
                     //uploading the image
                     UploadTask uploadTask = childRef.putFile(filePath);
@@ -155,39 +155,39 @@ public class StoreImageActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             pd.dismiss();
-                            Toast.makeText(StoreImageActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(StoreImageActivity.this, "Upload successful", Toast.LENGTH_LONG).show();
                             Log.d("URI", taskSnapshot.getDownloadUrl().toString());
-                            myRef.child("card" + num + "/image").setValue(taskSnapshot.getDownloadUrl().toString());
 
-                            try {
+                            CardModel card = new CardModel(taskSnapshot.getDownloadUrl().toString());
+                            String uploadId = myRef.push().getKey();
+                            myRef.child(uploadId).setValue(card);
+                            //myRef.child("card" + num).setValue(card);
+
+                            /*try {
                                 myRef.child("card" + num + "/latitude").setValue(lat);
                                 myRef.child("card" + num + "/longitude").setValue(lon);
                             } catch(Exception e){
                                 Log.e("ERROR", "No lat or long found");
                                 e.printStackTrace();
-                            }
+                            }*/
                             num++;
-                            imageNum.setValue(num);
+                            //imageNum.setValue(num);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             pd.dismiss();
-                            Toast.makeText(StoreImageActivity.this, "Upload Failed -> " + e, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(StoreImageActivity.this, "Upload Failed -> " + e, Toast.LENGTH_LONG).show();
+                        }
+                    }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            //displaying upload progress
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            pd.setMessage("Uploaded " + ((int)progress) + "%...");
                         }
                     });
 
-                    /*myRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Log.d("RETURNED", dataSnapshot.getValue(String.class));
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Log.w("ERROR", databaseError.toException());
-                        }
-                    });*/
                     /*childRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
@@ -220,7 +220,7 @@ public class StoreImageActivity extends AppCompatActivity {
                 }
 
                 if(lat == 0 && lon == 0){
-                    Toast.makeText(StoreImageActivity.this, "No Latitude and Longitude Found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StoreImageActivity.this, "No Latitude and Longitude Found", Toast.LENGTH_LONG).show();
                 } else{
                     LatLng pos = new LatLng(lat, lon);
                     locs.add(pos);
@@ -243,5 +243,11 @@ public class StoreImageActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    public String getFileExtension(Uri uri){
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(uri));
     }
 }

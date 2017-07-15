@@ -40,7 +40,7 @@ import java.util.ArrayList;
 
 public class CardFragment extends Fragment{
     //creating reference to firebase storage
-    FirebaseStorage storage = FirebaseStorage.getInstance();
+    /*FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
 
     //creating reference to firebase database
@@ -48,8 +48,6 @@ public class CardFragment extends Fragment{
     DatabaseReference myRef = database.getReference("Kevin/Trip1");
     DatabaseReference imageNum = database.getReference("Kevin/Trip1/image number");
 
-    String Wonders[] = {"Chichen Itza","Christ the Redeemer","Great Wall of China","Machu Picchu","Petra","Taj Mahal","Colosseum"};
-    int Images[] = {R.drawable.chichen_itza,R.drawable.christ_the_redeemer,R.drawable.great_wall_of_china,R.drawable.machu_picchu,R.drawable.petra,R.drawable.taj_mahal,R.drawable.colosseum};
     ArrayList<CardModel> listitems = new ArrayList<>();
     RecyclerView MyRecyclerView;
 
@@ -207,8 +205,8 @@ public class CardFragment extends Fragment{
         //Log.d("NUMINLIST", Integer.toString(num));
         for(int i = 0; i < num; i++){
             CardModel item = new CardModel();
-            item.setCardTitle(Wonders[i]);
-            item.setImagePath(Images[i]);
+            //item.setCardTitle(Wonders[i]);
+            //item.setImagePath(Images[i]);
             item.setIsfav(0);
             item.setIsturned(0);
             listitems.add(item);
@@ -232,5 +230,5 @@ public class CardFragment extends Fragment{
             }
         });
         return path[0];
-    }
+    }*/
 }

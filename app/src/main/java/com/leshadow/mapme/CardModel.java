@@ -5,41 +5,38 @@ package com.leshadow.mapme;
  */
 
 public class CardModel {
-    String cardTitle;
-    int imagePath;
-    String desc;
-    int isfav;
-    int isturned;
+    //String cardTitle;
+    String image;
+    //String desc;
+    //int isFav;
+    //int isShared;
 
     public CardModel(){
-        cardTitle = "";
-        imagePath = 0;
-        desc = "";
+
     }
 
-    public CardModel(String cardTitle, int imagePath, String desc){
-        this.cardTitle = cardTitle;
-        this.imagePath = imagePath;
-        this.desc = desc;
+    public CardModel(String image){
+        //this.cardTitle = cardTitle;
+        this.image = image;
     }
 
-    public String getCardTitle() {
+    /*public String getCardTitle() {
         return cardTitle;
     }
 
     public void setCardTitle(String cardTitle) {
         this.cardTitle = cardTitle;
+    }*/
+
+    public String getImage() {
+        return image;
     }
 
-    public int getImagePath() {
-        return imagePath;
+    public void setImage(String image) {
+        this.image = image;
     }
 
-    public void setImagePath(int imagePath) {
-        this.imagePath = imagePath;
-    }
-
-    public String getDesc() {
+    /*public String getDesc() {
         return desc;
     }
 
@@ -47,19 +44,19 @@ public class CardModel {
         this.desc = desc;
     }
 
-    public int getIsturned() {
-        return isturned;
+    public int getIsShared() {
+        return isShared;
     }
 
-    public void setIsturned(int isturned) {
-        this.isturned = isturned;
+    public void setIsShared(int isShared) {
+        this.isShared = isShared;
     }
 
     public int getIsfav() {
-        return isfav;
+        return isFav;
     }
 
-    public void setIsfav(int isfav) {
-        this.isfav = isfav;
-    }
+    public void setIsfav(int isFav) {
+        this.isFav = isFav;
+    }*/
 }
