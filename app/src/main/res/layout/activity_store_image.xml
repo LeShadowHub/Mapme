@@ -24,7 +24,7 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="280dp"
         android:id="@+id/imgView"/>
 
     <!--ImageView
@@ -33,9 +33,16 @@
         android:layout_gravity="center"
         android:layout_width="50dp"
         android:layout_height="50dp" /-->
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Map Image"
         android:id="@+id/mapImg"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Images"
+        android:id="@+id/viewImg"/>
 </LinearLayout>

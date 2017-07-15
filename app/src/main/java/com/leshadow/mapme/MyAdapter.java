@@ -4,12 +4,17 @@ package com.leshadow.mapme;
  * Created by OEM on 7/14/2017.
  */
 import android.content.Context;
+import android.content.Intent;
+import android.renderscript.ScriptGroup;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import java.util.List;
 
@@ -32,10 +37,26 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position){
+    public void onBindViewHolder(MyViewHolder holder, final int position){
         CardModel card = cards.get(position);
-        //holder.titleTextView.setText(card.getCardTitle());
+        holder.titleTextView.setText(card.getTitle());
         Glide.with(context).load(card.getImage()).into(holder.coverImageView);
+
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "You Clicked the Card", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        holder.settingView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), InputInfoActivity.class);
+                intent.putExtra("CardObj", cards.get(position));
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -44,14 +65,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
-        //public TextView titleTextView;
+        public TextView titleTextView;
         public ImageView coverImageView;
+        public ImageView settingView;
+        public LinearLayout linearLayout;
 
         public MyViewHolder(View itemView){
             super(itemView);
 
-            //titleTextView = (TextView)itemView.findViewById(R.id.titleTextView);
+            titleTextView = (TextView)itemView.findViewById(R.id.titleTextView);
             coverImageView = (ImageView)itemView.findViewById(R.id.coverImageView);
+            settingView = (ImageView)itemView.findViewById(R.id.settingView);
+            linearLayout = (LinearLayout)itemView.findViewById(R.id.linearLayout);
         }
     }
 }

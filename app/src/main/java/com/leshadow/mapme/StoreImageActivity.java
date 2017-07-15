@@ -40,7 +40,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class StoreImageActivity extends AppCompatActivity {
-    Button chooseImg, uploadImg, mapImg;
+    Button chooseImg, uploadImg, mapImg, viewImg;
     ImageView imgView, imgView2;
     int PICK_IMAGE_REQUEST = 111;
     Uri filePath;
@@ -67,8 +67,8 @@ public class StoreImageActivity extends AppCompatActivity {
         chooseImg = (Button)findViewById(R.id.chooseImg);
         uploadImg = (Button)findViewById(R.id.uploadImg);
         imgView = (ImageView)findViewById(R.id.imgView);
-        //imgView2 = (ImageView)findViewById(R.id.imgView2);
         mapImg = (Button)findViewById(R.id.mapImg);
+        viewImg = (Button)findViewById(R.id.viewImg);
 
         pd = new ProgressDialog(this);
         pd.setTitle("Uploading");
@@ -111,19 +111,24 @@ public class StoreImageActivity extends AppCompatActivity {
             }
         });*/
 
+        viewImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StoreImageActivity.this, UserViewActivity.class);
+                startActivity(intent);
+            }
+        });
 
         mapImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if(locs.size() > 0){
+                if(locs.size() > 0){
                     Intent posIntent = new Intent(StoreImageActivity.this, MapActivity.class);
                     posIntent.putParcelableArrayListExtra("allPos", locs);
                     startActivity(posIntent);
                 } else{
                     Toast.makeText(StoreImageActivity.this, "No Latitude and Longitude Found", Toast.LENGTH_SHORT).show();
-                }*/
-                Intent intent = new Intent(StoreImageActivity.this, UserViewActivity.class);
-                startActivity(intent);
+                }
             }
         });
 
@@ -158,6 +163,7 @@ public class StoreImageActivity extends AppCompatActivity {
 
                             CardModel card = new CardModel(taskSnapshot.getDownloadUrl().toString());
                             String uploadId = myRef.push().getKey();
+                            card.setKey(uploadId);
                             myRef.child(uploadId).setValue(card);
                             //myRef.child("card" + num).setValue(card);
 

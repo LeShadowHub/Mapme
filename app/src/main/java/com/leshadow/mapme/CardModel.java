@@ -1,13 +1,17 @@
 package com.leshadow.mapme;
 
+import java.io.Serializable;
+
 /**
  * Created by OEM on 7/12/2017.
  */
 
-public class CardModel {
-    //String cardTitle;
+@SuppressWarnings("serial")
+public class CardModel implements Serializable{
+    String title;
     String image;
-    //String desc;
+    String desc;
+    String key;
     //int isFav;
     //int isShared;
 
@@ -20,13 +24,21 @@ public class CardModel {
         this.image = image;
     }
 
-    /*public String getCardTitle() {
-        return cardTitle;
+    public String getKey(){
+        return key;
     }
 
-    public void setCardTitle(String cardTitle) {
-        this.cardTitle = cardTitle;
-    }*/
+    public void setKey(String key){
+        this.key = key;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public String getImage() {
         return image;
@@ -36,7 +48,7 @@ public class CardModel {
         this.image = image;
     }
 
-    /*public String getDesc() {
+    public String getDesc() {
         return desc;
     }
 
@@ -44,7 +56,7 @@ public class CardModel {
         this.desc = desc;
     }
 
-    public int getIsShared() {
+    /*public int getIsShared() {
         return isShared;
     }
 

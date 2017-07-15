@@ -1,5 +1,6 @@
 package com.leshadow.mapme;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class InputInfoActivity extends AppCompatActivity {
 
     //creating reference to firebase storage
@@ -24,9 +28,8 @@ public class InputInfoActivity extends AppCompatActivity {
     //creating reference to firebase database
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("Kevin/Trip1");
-    DatabaseReference imageNum = database.getReference("Kevin/Trip1/image number");
-    public String title;
-    public String desc;
+
+    CardModel card;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,8 @@ public class InputInfoActivity extends AppCompatActivity {
 
         etDesc.setMaxLines(5);
 
+        card = (CardModel)getIntent().getSerializableExtra("CardObj");
+
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,8 +51,16 @@ public class InputInfoActivity extends AppCompatActivity {
                 if (etTitle.getText().toString().trim().length() == 0 || etDesc.getText().toString().trim().length() == 0) {
                     Toast.makeText(InputInfoActivity.this, "Please Fill Out All Fields", Toast.LENGTH_SHORT).show();
                 } else{
-                    title = etTitle.getText().toString();
-                    desc = etDesc.getText().toString();
+                    card.setTitle(etTitle.getText().toString());
+                    card.setDesc(etDesc.getText().toString());
+
+                    Map<String, Object> taskMap = new HashMap<String, Object>();
+                    //taskMap.put("title", etTitle.getText().toString());
+                    //taskMap.put("desc", etDesc.getText().toString());
+                    myRef.child(card.getKey()).setValue(card);
+
+                    Intent intent = new Intent(InputInfoActivity.this, UserViewActivity.class);
+                    startActivity(intent);
                 }
 
             }
