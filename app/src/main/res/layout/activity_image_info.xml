@@ -11,6 +11,10 @@
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
         android:elevation="4dp"
         card_view:cardCornerRadius="8dp">
 
@@ -60,10 +64,35 @@
 
     </android.support.v7.widget.CardView>
 
-    <fragment
-        android:id="@+id/map_frag"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_below="@id/card_view"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+
+        android:id="@+id/mapLayout">
+
+        <fragment
+            android:id="@+id/map_frag"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/btnExpand"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:background="@drawable/ic_chevron_double_down_grey600_24dp"
+        android:layout_alignTop="@+id/card_view"
+        android:layout_alignLeft="@+id/card_view"
+        android:layout_alignStart="@+id/card_view" />
+
+    <Button
+        android:id="@+id/btnCollapse"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:background="@drawable/ic_chevron_double_up_grey600_24dp"
+        android:layout_alignTop="@+id/card_view"
+        android:layout_alignRight="@+id/card_view"
+        android:layout_alignEnd="@+id/card_view" />
 </RelativeLayout>
