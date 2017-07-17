@@ -17,10 +17,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserViewActivity extends AppCompatActivity {
+public class UserMainViewActivity extends AppCompatActivity {
 
     //recyclerview object
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerViewMain;
 
     //adapter object
     private RecyclerView.Adapter adapter;
@@ -35,15 +35,15 @@ public class UserViewActivity extends AppCompatActivity {
     private List<CardModel> cards;
 
     String username;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_view);
+        setContentView(R.layout.activity_user_main_view);
+        getSupportActionBar().setTitle("All Trips");
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewMain = (RecyclerView) findViewById(R.id.recyclerViewMain);
+        recyclerViewMain.setHasFixedSize(true);
+        recyclerViewMain.setLayoutManager(new LinearLayoutManager(this));
 
         pd = new ProgressDialog(this);
         cards = new ArrayList<>();
@@ -53,7 +53,7 @@ public class UserViewActivity extends AppCompatActivity {
         //displaying progress dialog while fetching images
         pd.setMessage("Please wait...");
         pd.show();
-        mDatabase = FirebaseDatabase.getInstance().getReference(username + "/Trip1");
+        mDatabase = FirebaseDatabase.getInstance().getReference(username + "/AllTrips");
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -67,10 +67,10 @@ public class UserViewActivity extends AppCompatActivity {
                 }
 
                 //creating adapter
-                adapter = new MyAdapter(getApplicationContext(), cards);
+                adapter = new MyMainAdapter(getApplicationContext(), cards);
 
                 //adding adapter to recyclerView
-                recyclerView.setAdapter(adapter);
+                recyclerViewMain.setAdapter(adapter);
             }
 
             @Override

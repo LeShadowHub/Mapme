@@ -52,6 +52,7 @@ public class StoreImageActivity extends AppCompatActivity {
     ArrayList<LatLng> locs = new ArrayList<LatLng>();
     ProgressDialog pd;
     String username;
+    boolean firstImage = false;
 
     //creating reference to firebase storage
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -61,6 +62,7 @@ public class StoreImageActivity extends AppCompatActivity {
     //creating reference to firebase database
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef;
+    DatabaseReference allRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +77,26 @@ public class StoreImageActivity extends AppCompatActivity {
         username = getIntent().getStringExtra("username");
         storageRef = storage.getReference(username + "/Trip1");
         myRef = database.getReference(username + "/Trip1");
+        allRef = database.getReference(username + "/AllTrips");
 
 
         pd = new ProgressDialog(this);
         pd.setTitle("Uploading");
+
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("NUMBER OF IMAGES", Integer.toString((int)dataSnapshot.getChildrenCount()));
+                if(dataSnapshot.getChildrenCount() == 0){
+                    firstImage = true;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("ERROR", databaseError.toException());
+            }
+        });
 
         //Track image number
         /*imageNum.addValueEventListener(new ValueEventListener() {
@@ -121,7 +139,7 @@ public class StoreImageActivity extends AppCompatActivity {
         viewImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StoreImageActivity.this, UserViewActivity.class);
+                Intent intent = new Intent(StoreImageActivity.this, UserMainViewActivity.class);
                 intent.putExtra("username", username);
                 startActivity(intent);
             }
@@ -169,6 +187,7 @@ public class StoreImageActivity extends AppCompatActivity {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bmp.compress(Bitmap.CompressFormat.JPEG, 20, baos);
                     byte[] data = baos.toByteArray();
+
                     UploadTask uploadTask = childRef.putBytes(data);
 
                     //UploadTask uploadTask = childRef.putFile(filePath);
@@ -192,6 +211,15 @@ public class StoreImageActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                             myRef.child(uploadId).setValue(card);
+
+                            //Place first card into list of main trip view
+                            if(firstImage){
+                                uploadId = allRef.push().getKey();
+                                card.setKey(uploadId);
+                                allRef.child(uploadId).setValue(card);
+                                firstImage = false;
+                            }
+
                             num++;
 
                         }
