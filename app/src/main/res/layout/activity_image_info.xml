@@ -10,7 +10,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="350dp"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
@@ -25,10 +25,31 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="280dp"
                 android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
                 android:id="@+id/cover_image"
                 android:transitionName="selectedImage"/>
+
+            <View
+                android:id="@+id/viewExpand"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:background="#000000"
+                android:alpha="0.3"
+                android:layout_alignTop="@+id/cover_image"
+                android:layout_alignLeft="@+id/cover_image"
+                android:layout_alignStart="@+id/cover_image" />
+
+            <View
+                android:id="@+id/viewCollapse"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:background="#000000"
+                android:alpha="0.3"
+                android:layout_alignTop="@+id/cover_image"
+                android:layout_alignRight="@+id/cover_image"
+                android:layout_alignEnd="@+id/cover_image" />
 
             <!--View
                 android:layout_width="match_parent"
@@ -67,7 +88,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:id="@+id/mapLayout">
 
         <fragment
@@ -82,7 +102,7 @@
         android:id="@+id/btnExpand"
         android:layout_width="50dp"
         android:layout_height="30dp"
-        android:background="@drawable/ic_chevron_double_down_grey600_24dp"
+        android:background="@drawable/ic_chevron_double_down_white_24dp"
         android:layout_alignTop="@+id/card_view"
         android:layout_alignLeft="@+id/card_view"
         android:layout_alignStart="@+id/card_view" />
@@ -91,8 +111,9 @@
         android:id="@+id/btnCollapse"
         android:layout_width="50dp"
         android:layout_height="30dp"
-        android:background="@drawable/ic_chevron_double_up_grey600_24dp"
+        android:background="@drawable/ic_chevron_double_up_white_24dp"
         android:layout_alignTop="@+id/card_view"
         android:layout_alignRight="@+id/card_view"
         android:layout_alignEnd="@+id/card_view" />
+
 </RelativeLayout>

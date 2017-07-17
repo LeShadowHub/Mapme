@@ -33,6 +33,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -158,8 +159,19 @@ public class StoreImageActivity extends AppCompatActivity {
 
                     StorageReference childRef = storageRef.child(System.currentTimeMillis() + "." + getFileExtension(filePath));
 
-                    //uploading the image
-                    UploadTask uploadTask = childRef.putFile(filePath);
+                    //Compress and upload the image
+                    Bitmap bmp = null;
+                    try {
+                        bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bmp.compress(Bitmap.CompressFormat.JPEG, 20, baos);
+                    byte[] data = baos.toByteArray();
+                    UploadTask uploadTask = childRef.putBytes(data);
+
+                    //UploadTask uploadTask = childRef.putFile(filePath);
 
                     uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override

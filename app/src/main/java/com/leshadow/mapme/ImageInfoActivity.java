@@ -1,16 +1,22 @@
 package com.leshadow.mapme;
 
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.util.NoSuchPropertyException;
 import android.view.Display;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +31,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.koushikdutta.ion.Ion;
+
+import java.util.NoSuchElementException;
 
 public class ImageInfoActivity extends AppCompatActivity implements OnMapReadyCallback {
     CardModel card;
@@ -52,10 +61,19 @@ public class ImageInfoActivity extends AppCompatActivity implements OnMapReadyCa
         final Button btnExpand = (Button)findViewById(R.id.btnExpand);
         final Button btnCollapse = (Button)findViewById(R.id.btnCollapse);
         final CardView cardView = (CardView)findViewById(R.id.card_view);
+        final View viewExpand = findViewById(R.id.viewExpand);
+        final View viewCollapse = findViewById(R.id.viewCollapse);
+
+        viewExpand.bringToFront();
+        viewCollapse.bringToFront();
 
         pos = new LatLng(card.getLat(), card.getLon());
 
-        Glide.with(this).load(card.getImage()).into(cover_image);
+        Glide.with(this)
+                .load(card.getImage())
+                //.centerCrop()
+                .into(cover_image);
+
         image_title.setText(card.getTitle());
         image_details.setText(card.getDesc());
 
@@ -103,6 +121,74 @@ public class ImageInfoActivity extends AppCompatActivity implements OnMapReadyCa
         });
     }
 
+    private void scaleImage(ImageView view) throws NoSuchElementException {
+        // Get bitmap from the the ImageView.
+        Bitmap bitmap = null;
+
+        try {
+            Drawable drawing = view.getDrawable();
+            bitmap = ((BitmapDrawable) drawing).getBitmap();
+        } catch (NullPointerException e) {
+            throw new NoSuchElementException("No drawable on given view");
+        } catch (ClassCastException e) {
+            // Check bitmap is Ion drawable
+            bitmap = Ion.with(view).getBitmap();
+        }
+
+        // Get current dimensions AND the desired bounding box
+        int width = 0;
+
+        try {
+            width = bitmap.getWidth();
+        } catch (NullPointerException e) {
+            throw new NoSuchElementException("Can't find bitmap on given view/drawable");
+        }
+
+        int height = bitmap.getHeight();
+        int bounding = dpToPx(250);
+        Log.i("Test", "original width = " + Integer.toString(width));
+        Log.i("Test", "original height = " + Integer.toString(height));
+        Log.i("Test", "bounding = " + Integer.toString(bounding));
+
+        // Determine how much to scale: the dimension requiring less scaling is
+        // closer to the its side. This way the image always stays inside your
+        // bounding box AND either x/y axis touches it.
+        float xScale = ((float) bounding) / width;
+        float yScale = ((float) bounding) / height;
+        float scale = (xScale <= yScale) ? xScale : yScale;
+        Log.i("Test", "xScale = " + Float.toString(xScale));
+        Log.i("Test", "yScale = " + Float.toString(yScale));
+        Log.i("Test", "scale = " + Float.toString(scale));
+
+        // Create a matrix for the scaling and add the scaling data
+        Matrix matrix = new Matrix();
+        matrix.postScale(scale, scale);
+
+        // Create a new bitmap and convert it to a format understood by the ImageView
+        Bitmap scaledBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+        width = scaledBitmap.getWidth(); // re-use
+        height = scaledBitmap.getHeight(); // re-use
+        BitmapDrawable result = new BitmapDrawable(scaledBitmap);
+        Log.i("Test", "scaled width = " + Integer.toString(width));
+        Log.i("Test", "scaled height = " + Integer.toString(height));
+
+        // Apply the scaled bitmap
+        view.setImageDrawable(result);
+
+        // Now change ImageView's dimensions to match the scaled image
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
+        params.width = width;
+        params.height = height;
+        view.setLayoutParams(params);
+
+        Log.i("Test", "done");
+    }
+
+    private int dpToPx(int dp) {
+        float density = getApplicationContext().getResources().getDisplayMetrics().density;
+        return Math.round((float)dp * density);
+    }
+
     @Override
     public void onMapReady(GoogleMap map){
         mMap = map;
@@ -128,6 +214,5 @@ public class ImageInfoActivity extends AppCompatActivity implements OnMapReadyCa
             //mMap.animateCamera(CameraUpdateFactory.newLatLng(pos), 1000, null);
             //mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 1000, null);
         }
-
     }
 }

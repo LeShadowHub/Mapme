@@ -45,7 +45,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
     public void onBindViewHolder(final MyViewHolder holder, final int position){
         final CardModel card = cards.get(position);
         holder.titleTextView.setText(card.getTitle());
-        Glide.with(context).load(card.getImage()).into(holder.coverImageView);
+        Glide.with(context)
+                .load(card.getImage())
+                //.thumbnail(0.5f)
+                .into(holder.coverImageView);
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
