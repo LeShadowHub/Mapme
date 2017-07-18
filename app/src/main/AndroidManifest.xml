@@ -52,7 +52,8 @@
         <activity android:name=".UserViewActivity" />
         <activity android:name=".InputInfoActivity" />
         <activity android:name=".ImageInfoActivity" />
-        <activity android:name=".UserMainViewActivity"></activity>
+        <activity android:name=".UserMainViewActivity" />
+        <activity android:name=".InputTripInfoActivity"></activity>
     </application>
 
 </manifest>

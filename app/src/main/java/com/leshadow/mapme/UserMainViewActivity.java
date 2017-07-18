@@ -1,11 +1,16 @@
 package com.leshadow.mapme;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -34,11 +39,18 @@ public class UserMainViewActivity extends AppCompatActivity {
     //list to hold all the uploaded cards;
     private List<CardModel> cards;
 
+    //toolbar
+    private Toolbar toolbar;
+
     String username;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_main_view);
+        //getSupportActionBar().setTitle("All Trips");
+
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("All Trips");
 
         recyclerViewMain = (RecyclerView) findViewById(R.id.recyclerViewMain);
@@ -78,5 +90,33 @@ public class UserMainViewActivity extends AppCompatActivity {
                 pd.dismiss();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int res_id = item.getItemId();
+        switch (res_id){
+            case R.id.action_add:
+                Intent intent = new Intent(UserMainViewActivity.this, InputTripInfoActivity.class);
+                intent.putExtra("username", username);
+                startActivity(intent);
+                return true;
+            case R.id.action_edit:
+                return true;
+            case R.id.action_search:
+                return true;
+            case R.id.action_contact_us:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

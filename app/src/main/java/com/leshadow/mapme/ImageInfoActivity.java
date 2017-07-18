@@ -47,7 +47,7 @@ public class ImageInfoActivity extends AppCompatActivity implements OnMapReadyCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_info);
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -83,7 +83,7 @@ public class ImageInfoActivity extends AppCompatActivity implements OnMapReadyCa
             display.getRealSize(size);
             height = size.y;
             height = height/2;
-        } else{
+        //} else{
             height = display.getHeight();
         }
 

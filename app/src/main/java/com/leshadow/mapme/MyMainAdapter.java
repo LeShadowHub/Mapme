@@ -53,8 +53,9 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.MyMainView
             @Override
             public void onClick(View v) {
                 //Toast.makeText(context, "You Clicked the Card", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(v.getContext(), ImageInfoActivity.class);
-                intent.putExtra("CardObj", cards.get(position));
+                Intent intent = new Intent(v.getContext(), UserViewActivity.class);
+                intent.putExtra("username", cards.get(position).getUsername());
+                intent.putExtra("trip", cards.get(position).getTrip());
                 v.getContext().startActivity(intent);
 
             }

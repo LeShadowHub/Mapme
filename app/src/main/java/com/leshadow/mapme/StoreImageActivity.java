@@ -52,6 +52,8 @@ public class StoreImageActivity extends AppCompatActivity {
     ArrayList<LatLng> locs = new ArrayList<LatLng>();
     ProgressDialog pd;
     String username;
+    String trip;
+
     boolean firstImage = false;
 
     //creating reference to firebase storage
@@ -68,6 +70,7 @@ public class StoreImageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_image);
+
         chooseImg = (Button)findViewById(R.id.chooseImg);
         uploadImg = (Button)findViewById(R.id.uploadImg);
         imgView = (ImageView)findViewById(R.id.imgView);
@@ -75,8 +78,10 @@ public class StoreImageActivity extends AppCompatActivity {
         viewImg = (Button)findViewById(R.id.viewImg);
 
         username = getIntent().getStringExtra("username");
-        storageRef = storage.getReference(username + "/Trip1");
-        myRef = database.getReference(username + "/Trip1");
+        trip = getIntent().getStringExtra("trip");
+
+        storageRef = storage.getReference(username + "/" + trip);
+        myRef = database.getReference(username + "/" + trip);
         allRef = database.getReference(username + "/AllTrips");
 
 
@@ -202,6 +207,7 @@ public class StoreImageActivity extends AppCompatActivity {
                             CardModel card = new CardModel(taskSnapshot.getDownloadUrl().toString());
                             String uploadId = myRef.push().getKey();
                             card.setKey(uploadId);
+                            card.setTrip(trip);
                             card.setUsername(username);
                             try {
                                 card.setLat(lat);
@@ -216,6 +222,7 @@ public class StoreImageActivity extends AppCompatActivity {
                             if(firstImage){
                                 uploadId = allRef.push().getKey();
                                 card.setKey(uploadId);
+                                card.setTitle(trip);
                                 allRef.child(uploadId).setValue(card);
                                 firstImage = false;
                             }

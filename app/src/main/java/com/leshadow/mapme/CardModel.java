@@ -13,6 +13,7 @@ public class CardModel implements Serializable{
     String desc;
     String key;
     String username;
+    String trip;
     float lat;
     float lon;
     //int isFav;
@@ -25,6 +26,14 @@ public class CardModel implements Serializable{
     public CardModel(String image){
         //this.cardTitle = cardTitle;
         this.image = image;
+    }
+
+    public String getTrip(){
+        return trip;
+    }
+
+    public void setTrip(String trip){
+        this.trip = trip;
     }
 
     public String getUsername(){
