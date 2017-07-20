@@ -1,86 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/plane"
     tools:context="com.leshadow.mapme.ServerRegisterActivity">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:alpha="0.6"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Create Account"
+        android:textSize="40sp"
+        android:textColor="#FFFFFF"
+        android:id="@+id/textView"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="65dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="After clicking the Register Button, you will be redirected to Login Screen"
+        android:textColor="#ffffff"
+        android:id="@+id/textView2"
+        android:gravity="center_horizontal"
+        android:layout_below="@+id/textView"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView" />
 
     <EditText
         android:id="@+id/etName"
-        android:layout_width="0dp"
-        android:layout_height="43dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_below="@id/textView2"
         android:ems="10"
         android:hint="Name"
+        android:drawableLeft="@drawable/ic_contacts_white_36dp"
+        android:drawablePadding="10dp"
         android:inputType="textPersonName"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:maxLines="1"
+        android:textColor="#ffffff"
+        android:textColorHint="#cccccc" />
 
     <EditText
         android:id="@+id/etUsername"
-        android:layout_width="0dp"
-        android:layout_height="43dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@id/etName"
         android:ems="10"
         android:hint="Username"
+        android:drawableLeft="@drawable/ic_account_circle_white_36dp"
+        android:drawablePadding="10dp"
         android:inputType="textPersonName"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etName" />
+        android:maxLines="1"
+        android:textColor="#ffffff"
+        android:textColorHint="#cccccc" />
 
     <EditText
         android:id="@+id/etPassword"
-        android:layout_width="0dp"
-        android:layout_height="43dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@id/etUsername"
         android:ems="10"
         android:hint="Password"
+        android:drawableLeft="@drawable/ic_key_white_36dp"
+        android:drawablePadding="10dp"
         android:inputType="textPassword"
-        app:layout_constraintHorizontal_bias="0.472"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etUsername" />
+        android:maxLines="1"
+        android:textColor="#ffffff"
+        android:textColorHint="#cccccc" />
 
     <EditText
         android:id="@+id/etAge"
-        android:layout_width="0dp"
-        android:layout_height="43dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@id/etPassword"
         android:ems="10"
         android:hint="Age"
+        android:drawableLeft="@drawable/ic_numeric_white_36dp"
+        android:drawablePadding="10dp"
         android:inputType="number"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+        android:maxLines="1"
+        android:textColor="#ffffff"
+        android:textColorHint="#cccccc" />
 
     <Button
         android:id="@+id/bRegister"
-        android:layout_width="351dp"
-        android:layout_height="48dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/etAge"
         android:text="Register"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.515"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.498" />
-</android.support.constraint.ConstraintLayout>
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+        android:background="@drawable/blue_btn_drawable" />
+</RelativeLayout>

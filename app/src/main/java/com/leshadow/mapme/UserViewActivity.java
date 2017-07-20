@@ -70,7 +70,7 @@ public class UserViewActivity extends AppCompatActivity {
         pd.show();
         mDatabase = FirebaseDatabase.getInstance().getReference(username + "/" + trip);
 
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 pd.dismiss();

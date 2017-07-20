@@ -16,7 +16,7 @@ public class CardModel implements Serializable{
     String trip;
     float lat;
     float lon;
-    //int isFav;
+    int isLiked;
     //int isShared;
 
     public CardModel(){
@@ -98,13 +98,13 @@ public class CardModel implements Serializable{
 
     public void setIsShared(int isShared) {
         this.isShared = isShared;
-    }
-
-    public int getIsfav() {
-        return isFav;
-    }
-
-    public void setIsfav(int isFav) {
-        this.isFav = isFav;
     }*/
+
+    public int getIsLiked() {
+        return isLiked;
+    }
+
+    public void setIsLiked(int isLiked) {
+        this.isLiked = isLiked;
+    }
 }
