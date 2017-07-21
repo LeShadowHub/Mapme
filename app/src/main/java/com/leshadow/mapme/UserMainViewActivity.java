@@ -1,7 +1,9 @@
 package com.leshadow.mapme;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -114,6 +116,27 @@ public class UserMainViewActivity extends AppCompatActivity {
             case R.id.action_search:
                 return true;
             case R.id.action_contact_us:
+                return true;
+            case R.id.action_logout:
+                final AlertDialog.Builder builder = new AlertDialog.Builder(UserMainViewActivity.this);
+                builder.setTitle("Log Out");
+                builder.setMessage("Do you want to logout ?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(UserMainViewActivity.this, ServerLoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

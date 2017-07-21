@@ -1,6 +1,9 @@
 package com.leshadow.mapme;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by OEM on 7/12/2017.
@@ -17,6 +20,7 @@ public class CardModel implements Serializable{
     float lat;
     float lon;
     int isLiked;
+    List<String> likes;
     //int isShared;
 
     public CardModel(){
@@ -90,6 +94,14 @@ public class CardModel implements Serializable{
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public List getLikes(){
+        return likes;
+    }
+
+    public void setLikes(List<String> likes){
+        this.likes = likes;
     }
 
     /*public int getIsShared() {

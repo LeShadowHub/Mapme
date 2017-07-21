@@ -55,15 +55,13 @@ public class InputInfoActivity extends AppCompatActivity {
                     card.setTitle(etTitle.getText().toString());
                     card.setDesc(etDesc.getText().toString());
 
-                    //Map<String, Object> taskMap = new HashMap<String, Object>();
-                    //taskMap.put("title", etTitle.getText().toString());
-                    //taskMap.put("desc", etDesc.getText().toString());
                     myRef.child(card.getKey()).setValue(card);
 
                     Intent intent = new Intent(InputInfoActivity.this, UserViewActivity.class);
                     intent.putExtra("username", card.getUsername());
                     intent.putExtra("trip", card.getTrip());
                     startActivity(intent);
+                    finish();
                 }
 
             }

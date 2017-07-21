@@ -31,13 +31,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
     private Context context;
     private List<CardModel> cards;
+    private String username;
     //creating reference to firebase database
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef;
 
-    public MyAdapter(Context context, List<CardModel> cards){
+    public MyAdapter(Context context, List<CardModel> cards, String username){
         this.cards = cards;
         this.context = context;
+        this.username = username;
     }
 
     @Override
@@ -84,11 +86,33 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
                 int liked = 0;
                 myRef = database.getReference(card.getUsername() + "/" + card.getTrip());
                 holder.likeImageView.setImageResource(R.drawable.ic_liked);
-                Toast.makeText(v.getContext(), "You liked " + card.getTitle(), Toast.LENGTH_SHORT).show();
-                liked = card.getIsLiked();
-                liked++;
-                card.setIsLiked(liked);
-                myRef.child(card.getKey()).setValue(card);
+
+                List<String> likes = null;
+                if(card.getLikes() != null){
+                    likes = card.getLikes();
+                    if(likes.contains(username)){
+                        Toast.makeText(v.getContext(), "You have already liked " + card.getTitle(), Toast.LENGTH_SHORT).show();
+
+                    } else{
+                        Toast.makeText(v.getContext(), "You liked " + card.getTitle(), Toast.LENGTH_SHORT).show();
+                        liked = card.getIsLiked();
+                        liked++;
+                        card.setIsLiked(liked);
+                        likes.add(username);
+                        card.setLikes(likes);
+                        myRef.child(card.getKey()).setValue(card);
+                    }
+                } else{
+                    liked++;
+                    card.setIsLiked(liked);
+                    likes.add(username);
+                    card.setLikes(likes);
+                    myRef.child(card.getKey()).setValue(card);
+                }
+
+
+
+
             }
         });
 

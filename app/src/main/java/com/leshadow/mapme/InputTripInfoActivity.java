@@ -38,6 +38,7 @@ public class InputTripInfoActivity extends AppCompatActivity {
                     intent.putExtra("username", username);
                     intent.putExtra("trip", etTripTitle.getText().toString().trim());
                     startActivity(intent);
+                    finish();
                 }
 
             }

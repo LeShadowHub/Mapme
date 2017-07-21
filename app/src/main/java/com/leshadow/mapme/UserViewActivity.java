@@ -1,7 +1,9 @@
 package com.leshadow.mapme;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -82,7 +84,7 @@ public class UserViewActivity extends AppCompatActivity {
                 }
 
                 //creating adapter
-                adapter = new MyAdapter(getApplicationContext(), cards);
+                adapter = new MyAdapter(getApplicationContext(), cards, username);
 
                 //adding adapter to recyclerView
                 recyclerView.setAdapter(adapter);
@@ -118,6 +120,27 @@ public class UserViewActivity extends AppCompatActivity {
             case R.id.action_search:
                 return true;
             case R.id.action_contact_us:
+                return true;
+            case R.id.action_logout:
+                final AlertDialog.Builder builder = new AlertDialog.Builder(UserViewActivity.this);
+                builder.setTitle("Log Out");
+                builder.setMessage("Do you want to logout ?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(UserViewActivity.this, ServerLoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
