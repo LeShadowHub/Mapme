@@ -24,8 +24,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //PublicViewGenerator temp = new PublicViewGenerator();
-        //temp.generateWall();
+        PublicViewGenerator temp = new PublicViewGenerator();
+        //temp.generateUsers();
 
         Log.d("Generation Completed", "CHECKING");
 

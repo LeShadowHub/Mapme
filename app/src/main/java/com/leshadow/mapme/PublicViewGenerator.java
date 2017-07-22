@@ -7,6 +7,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -39,53 +40,76 @@ public class PublicViewGenerator {
 
     }
 
+    public void generateUsers(){
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
+                users = dataSnapshot.getValue(t);
+                Log.d("CHECKING FIRST", users.toString());
+                generateWall(users);
+            }
 
-    /*public void generateWall(){
-        //users = generateView();
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
 
-        Log.d("CHECKING", "RETURN TO GENERATEWALL");
-        if(users.size() > 0){
-            for(int i = 0; i < users.size(); i++){
-                final String user = users.get(i);
-                mDatabase = FirebaseDatabase.getInstance().getReference(user + "/AllTrips");
+    public void generateWall(List<String> users){
 
-                Log.d("CHECKING", "GENERATING ALL CARDS");
+        Log.d("CHECKING", "GENERATEWALL REACHED");
+        Log.d("CHECKING SECOND", users.toString());
 
-                mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+        final int[] remaining = {users.size()};
 
+        for(final int[] i = {0}; i[0] < users.size(); i[0]++){
+            final String user = users.get(i[0]);
+            mDatabase = FirebaseDatabase.getInstance().getReference(user + "/AllTrips");
+
+            //Query itemsQuery = mDatabase.orderByKey();
+            mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if(dataSnapshot.exists()){
                         //iterating through all values in database
                         for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
                             CardModel card = postSnapshot.getValue(CardModel.class);
                             allCards.add(card);
+                            //Log.d("CHECKING THIRD", allCards.toString());
                         }
                     }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        databaseError.toException().printStackTrace();
+                    if(--remaining[0] == 0){
+                        sortCards(allCards);
                     }
-                });
+                }
 
-            }
-
-            Collections.sort(allCards, new Comparator<CardModel>() {
                 @Override
-                public int compare(CardModel o1, CardModel o2) {
-                    return o1.getIsLiked()-o2.getIsLiked();
+                public void onCancelled(DatabaseError databaseError) {
+                    databaseError.toException().printStackTrace();
                 }
             });
-
-            for(int i = 0; i < allCards.size(); i++){
-                String uploadId = publicWall.push().getKey();
-                publicWall.child(uploadId).setValue(allCards.get(i));
-            }
         }
-    }*/
 
-    public List<String> generateView(final String username){
-        List<String> temp;
+    }
+
+    public void sortCards(List<CardModel> allCards){
+        Collections.sort(allCards, new Comparator<CardModel>() {
+            @Override
+            public int compare(CardModel o1, CardModel o2) {
+                return o2.getIsLiked()-o1.getIsLiked();
+            }
+        });
+        //Log.d("CHECKING FOURTH", allCards.toString());
+        for(int i = 0; i < allCards.size(); i++){
+            String uploadId = publicWall.push().getKey();
+            publicWall.child(uploadId).setValue(allCards.get(i));
+        }
+    }
+
+    public void generateUsers(final String username){
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -105,7 +129,5 @@ public class PublicViewGenerator {
                 databaseError.toException().printStackTrace();
             }
         });
-        Log.d("LIST OF USERS SECOND", users.toString());
-        return users;
     }
 }

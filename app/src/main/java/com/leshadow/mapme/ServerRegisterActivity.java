@@ -67,7 +67,7 @@ public class ServerRegisterActivity extends AppCompatActivity {
                             if(success){
                                 //users.add(username);
                                 //myRef.setValue(users);
-                                temp.generateView(username);
+                                temp.generateUsers(username);
                                 Intent intent = new Intent(ServerRegisterActivity.this, ServerLoginActivity.class);
                                 startActivity(intent);
                             } else{

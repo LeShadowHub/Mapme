@@ -9,11 +9,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserMainViewActivity extends AppCompatActivity {
+public class PublicViewActivity extends AppCompatActivity {
 
     //recyclerview object
     private RecyclerView recyclerViewMain;
@@ -49,13 +47,13 @@ public class UserMainViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_main_view);
+        setContentView(R.layout.activity_public_view);
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("All Trips");
+        getSupportActionBar().setTitle("Front Page");
 
-        recyclerViewMain = (RecyclerView) findViewById(R.id.recyclerViewMain);
+        recyclerViewMain = (RecyclerView) findViewById(R.id.recyclerViewPublic);
         recyclerViewMain.setHasFixedSize(true);
         recyclerViewMain.setLayoutManager(new LinearLayoutManager(this));
 
@@ -67,7 +65,7 @@ public class UserMainViewActivity extends AppCompatActivity {
         //displaying progress dialog while fetching images
         pd.setMessage("Please wait...");
         pd.show();
-        mDatabase = FirebaseDatabase.getInstance().getReference(username + "/AllTrips");
+        mDatabase = FirebaseDatabase.getInstance().getReference("PublicWall");
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -107,24 +105,24 @@ public class UserMainViewActivity extends AppCompatActivity {
         int res_id = item.getItemId();
         switch (res_id){
             case R.id.action_add:
-                Intent intent = new Intent(UserMainViewActivity.this, InputTripInfoActivity.class);
-                intent.putExtra("username", username);
-                startActivity(intent);
                 return true;
             case R.id.action_edit:
+                Intent intent = new Intent(PublicViewActivity.this, UserMainViewActivity.class);
+                intent.putExtra("username", username);
+                startActivity(intent);
                 return true;
             case R.id.action_search:
                 return true;
             case R.id.action_contact_us:
                 return true;
             case R.id.action_logout:
-                final AlertDialog.Builder builder = new AlertDialog.Builder(UserMainViewActivity.this);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(PublicViewActivity.this);
                 builder.setTitle("Log Out");
                 builder.setMessage("Do you want to logout ?");
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(UserMainViewActivity.this, ServerLoginActivity.class);
+                        Intent intent = new Intent(PublicViewActivity.this, ServerLoginActivity.class);
                         startActivity(intent);
                         finish();
                     }
