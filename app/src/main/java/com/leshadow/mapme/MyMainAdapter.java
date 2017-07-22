@@ -21,15 +21,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.MyMainViewHolder>{
     private Context context;
     private List<CardModel> cards;
+    private String username;
+    //creating reference to firebase database
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef;
 
-    public MyMainAdapter(Context context, List<CardModel> cards){
+    public MyMainAdapter(Context context, List<CardModel> cards, String username){
         this.cards = cards;
         this.context = context;
+        this.username = username;
     }
 
     @Override
@@ -44,6 +53,11 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.MyMainView
     public void onBindViewHolder(final MyMainAdapter.MyMainViewHolder holder, final int position){
         final CardModel card = cards.get(position);
         holder.titleTextView.setText(card.getTitle());
+        if(card.getLikes() != null) {
+            if (card.getLikes().contains(username)) {
+                holder.likeImageView.setImageResource(R.drawable.ic_liked);
+            }
+        }
         Glide.with(context)
                 .load(card.getImage())
                 //.thumbnail(0.5f)
@@ -70,6 +84,47 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.MyMainView
                 v.getContext().startActivity(intent);
             }
         });
+
+        holder.likeImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int liked = 0;
+                String title;
+                myRef = database.getReference(card.getUsername() + "/AllTrips");
+                holder.likeImageView.setImageResource(R.drawable.ic_liked);
+
+                if(card.getTitle() != null){
+                    title = card.getTitle();
+                } else{
+                    title = "this trip";
+                }
+
+                List<String> likes = new ArrayList<String>();
+                if(card.getLikes() != null){
+                    likes = card.getLikes();
+                    if(likes.contains(username)){
+                        Toast.makeText(v.getContext(), "You have already liked " + title, Toast.LENGTH_SHORT).show();
+
+                    } else{
+                        Toast.makeText(v.getContext(), "You liked " + title, Toast.LENGTH_SHORT).show();
+                        liked = card.getIsLiked();
+                        liked++;
+                        card.setIsLiked(liked);
+                        likes.add(username);
+                        card.setLikes(likes);
+                        myRef.child(card.getKey()).setValue(card);
+                    }
+                } else{
+                    liked++;
+                    Toast.makeText(v.getContext(), "You liked " + title, Toast.LENGTH_SHORT).show();
+                    card.setIsLiked(liked);
+                    //can't add to a null object
+                    likes.add(username);
+                    card.setLikes(likes);
+                    myRef.child(card.getKey()).setValue(card);
+                }
+            }
+        });
     }
 
     @Override
@@ -82,6 +137,7 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.MyMainView
         public ImageView coverImageView;
         public ImageView settingView;
         public LinearLayout linearLayout;
+        public ImageView likeImageView;
 
         public MyMainViewHolder(View itemView){
             super(itemView);
@@ -90,6 +146,7 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.MyMainView
             coverImageView = (ImageView)itemView.findViewById(R.id.coverImageView);
             settingView = (ImageView)itemView.findViewById(R.id.settingView);
             linearLayout = (LinearLayout)itemView.findViewById(R.id.linearLayout);
+            likeImageView = (ImageView)itemView.findViewById(R.id.likeImageView);
         }
     }
 }

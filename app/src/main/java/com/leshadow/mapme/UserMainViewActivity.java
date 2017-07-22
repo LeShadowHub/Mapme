@@ -81,7 +81,7 @@ public class UserMainViewActivity extends AppCompatActivity {
                 }
 
                 //creating adapter
-                adapter = new MyMainAdapter(getApplicationContext(), cards);
+                adapter = new MyMainAdapter(getApplicationContext(), cards, username);
 
                 //adding adapter to recyclerView
                 recyclerViewMain.setAdapter(adapter);
