@@ -17,8 +17,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,14 +25,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,6 +47,7 @@ public class StoreImageActivity extends AppCompatActivity {
     float lon = 0;
     ArrayList<LatLng> locs = new ArrayList<LatLng>();
     ProgressDialog pd;
+    String myUsername;
     String username;
     String trip;
 
@@ -78,16 +75,17 @@ public class StoreImageActivity extends AppCompatActivity {
         viewImg = (Button)findViewById(R.id.viewImg);
 
         username = getIntent().getStringExtra("username");
+        myUsername = getIntent().getStringExtra("myUsername");
         trip = getIntent().getStringExtra("trip");
 
-        storageRef = storage.getReference(username + "/" + trip);
-        myRef = database.getReference(username + "/" + trip);
-        allRef = database.getReference(username + "/AllTrips");
-
+        storageRef = storage.getReference(myUsername + "/" + trip);
+        myRef = database.getReference(myUsername + "/" + trip);
+        allRef = database.getReference(myUsername + "/AllTrips");
 
         pd = new ProgressDialog(this);
         pd.setTitle("Uploading");
 
+        //Check for First Image of each trip to upload to AllTrips
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -103,50 +101,16 @@ public class StoreImageActivity extends AppCompatActivity {
             }
         });
 
-        //Track image number
-        /*imageNum.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue(Integer.class) != null){
-                    num = dataSnapshot.getValue(Integer.class);
-                    Log.w("NUMBER", dataSnapshot.getValue(Integer.class).toString());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("ERROR", databaseError.toException());
-            }
-        });*/
-
-        /*myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if(dataSnapshot.getValue(String.class) != null){
-                    Log.d("RETURNED", dataSnapshot.getValue(String.class));
-
-                    //Create tempRef and use Glide to download and display image
-                    StorageReference httpRef = storage.getReferenceFromUrl(dataSnapshot.getValue(String.class));
-                    Glide.with(StoreImageActivity.this)
-                            .using(new FirebaseImageLoader())
-                            .load(httpRef)
-                            .into(imgView2);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("ERROR", databaseError.toException());
-            }
-        });*/
 
         viewImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StoreImageActivity.this, UserMainViewActivity.class);
-                intent.putExtra("username", username);
+                Intent intent = new Intent(StoreImageActivity.this, UserViewActivity.class);
+                intent.putExtra("myUsername", myUsername);
+                intent.putExtra("username", myUsername);
+                intent.putExtra("trip", trip);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -208,7 +172,7 @@ public class StoreImageActivity extends AppCompatActivity {
                             String uploadId = myRef.push().getKey();
                             card.setKey(uploadId);
                             card.setTrip(trip);
-                            card.setUsername(username);
+                            card.setUsername(myUsername);
                             try {
                                 card.setLat(lat);
                                 card.setLon(lon);
@@ -244,14 +208,6 @@ public class StoreImageActivity extends AppCompatActivity {
                             pd.setMessage("Uploaded " + ((int)progress) + "%...");
                         }
                     });
-
-                    /*childRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            Log.e("uri: ", uri.toString());
-                            myRef.setValue(uri.toString());
-                        }
-                    });*/
                 }
                 else {
                     Toast.makeText(StoreImageActivity.this, "Select an image", Toast.LENGTH_SHORT).show();
@@ -302,6 +258,7 @@ public class StoreImageActivity extends AppCompatActivity {
         }
     }
 
+    //Getting type of image(.jpg, .png, etc)
     public String getFileExtension(Uri uri){
         ContentResolver cr = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();

@@ -8,23 +8,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class InputTripInfoActivity extends AppCompatActivity {
 
-    String username;
+    String myUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_trip_info);
-        //getSupportActionBar().setTitle("New Trip");
 
         final EditText etTripTitle = (EditText)findViewById(R.id.etTripTitle);
         final Button btnSaveTrip = (Button)findViewById(R.id.btnSaveTrip);
 
-        username = getIntent().getStringExtra("username");
+        myUsername = getIntent().getStringExtra("myUsername");
 
         btnSaveTrip.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,12 +31,12 @@ public class InputTripInfoActivity extends AppCompatActivity {
 
                 } else{
                     Intent intent = new Intent(InputTripInfoActivity.this, UserViewActivity.class);
-                    intent.putExtra("username", username);
+                    intent.putExtra("myUsername", myUsername);
+                    intent.putExtra("username", myUsername);
                     intent.putExtra("trip", etTripTitle.getText().toString().trim());
                     startActivity(intent);
                     finish();
                 }
-
             }
         });
     }

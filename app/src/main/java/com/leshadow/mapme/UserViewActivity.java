@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -45,7 +46,9 @@ public class UserViewActivity extends AppCompatActivity {
     private Toolbar toolbar;
 
     String username;
+    String myUsername;
     String trip;
+    Boolean publicView = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +66,14 @@ public class UserViewActivity extends AppCompatActivity {
         cards = new ArrayList<>();
 
         username = getIntent().getStringExtra("username");
+        myUsername = getIntent().getStringExtra("myUsername");
         trip = getIntent().getStringExtra("trip");
 
         getSupportActionBar().setTitle(trip);
+        if(!username.equals(myUsername)){
+            publicView =  true;
+            invalidateOptionsMenu();
+        }
 
         //displaying progress dialog while fetching images
         pd.setMessage("Please wait...");
@@ -84,7 +92,7 @@ public class UserViewActivity extends AppCompatActivity {
                 }
 
                 //creating adapter
-                adapter = new MyAdapter(getApplicationContext(), cards, username);
+                adapter = new MyAdapter(getApplicationContext(), cards, myUsername);
 
                 //adding adapter to recyclerView
                 recyclerView.setAdapter(adapter);
@@ -102,7 +110,26 @@ public class UserViewActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_main, menu);
 
+        if(publicView){
+            menu.findItem(R.id.action_add).setVisible(false);
+            menu.findItem(R.id.action_edit).setVisible(false);
+        }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!username.equals(myUsername)){
+            Intent intent = new Intent(UserViewActivity.this, PublicViewActivity.class);
+            intent.putExtra("myUsername", myUsername);
+            startActivity(intent);
+            finish();
+        } else{
+            Intent intent = new Intent(UserViewActivity.this, UserMainViewActivity.class);
+            intent.putExtra("myUsername", myUsername);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
@@ -112,8 +139,10 @@ public class UserViewActivity extends AppCompatActivity {
             case R.id.action_add:
                 Intent intent = new Intent(UserViewActivity.this, StoreImageActivity.class);
                 intent.putExtra("username", username);
+                intent.putExtra("myUsername", myUsername);
                 intent.putExtra("trip", trip);
                 startActivity(intent);
+                finish();
                 return true;
             case R.id.action_edit:
                 return true;

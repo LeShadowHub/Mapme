@@ -3,15 +3,12 @@ package com.leshadow.mapme;
 /**
  * Created by OEM on 7/17/2017.
  */
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,15 +27,16 @@ import java.util.List;
 public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.MyMainViewHolder>{
     private Context context;
     private List<CardModel> cards;
-    private String username;
+    private String myUsername;
+
     //creating reference to firebase database
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef;
 
-    public MyMainAdapter(Context context, List<CardModel> cards, String username){
+    public MyMainAdapter(Context context, List<CardModel> cards, String myUsername){
         this.cards = cards;
         this.context = context;
-        this.username = username;
+        this.myUsername = myUsername;
     }
 
     @Override
@@ -53,8 +51,18 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.MyMainView
     public void onBindViewHolder(final MyMainAdapter.MyMainViewHolder holder, final int position){
         final CardModel card = cards.get(position);
         holder.titleTextView.setText(card.getTitle());
+        holder.settingView.setVisibility(View.GONE);
+
+        //Disallow edits if not user
+        /*if(!card.getUsername().equals(myUsername)){
+            holder.settingView.setVisibility(View.GONE);
+        } else{
+            holder.likeImageView.setVisibility(View.GONE);
+        }*/
+
+        //Set Like if user liked the photo before
         if(card.getLikes() != null) {
-            if (card.getLikes().contains(username)) {
+            if (card.getLikes().contains(myUsername)) {
                 holder.likeImageView.setImageResource(R.drawable.ic_liked);
             }
         }
@@ -63,19 +71,22 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.MyMainView
                 //.thumbnail(0.5f)
                 .into(holder.coverImageView);
 
+        //Handle image click
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(context, "You Clicked the Card", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(v.getContext(), UserViewActivity.class);
                 intent.putExtra("username", cards.get(position).getUsername());
+                intent.putExtra("myUsername", myUsername);
                 intent.putExtra("trip", cards.get(position).getTrip());
                 v.getContext().startActivity(intent);
 
             }
         });
 
-        holder.settingView.setOnClickListener(new View.OnClickListener() {
+        //Change New Trip Title
+        /*holder.settingView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -83,8 +94,9 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.MyMainView
                 intent.putExtra("CardObj", cards.get(position));
                 v.getContext().startActivity(intent);
             }
-        });
+        });*/
 
+        //Like Button Click
         holder.likeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +114,7 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.MyMainView
                 List<String> likes = new ArrayList<String>();
                 if(card.getLikes() != null){
                     likes = card.getLikes();
-                    if(likes.contains(username)){
+                    if(likes.contains(myUsername)){
                         Toast.makeText(v.getContext(), "You have already liked " + title, Toast.LENGTH_SHORT).show();
 
                     } else{
@@ -110,7 +122,7 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.MyMainView
                         liked = card.getIsLiked();
                         liked++;
                         card.setIsLiked(liked);
-                        likes.add(username);
+                        likes.add(myUsername);
                         card.setLikes(likes);
                         myRef.child(card.getKey()).setValue(card);
                     }
@@ -119,7 +131,7 @@ public class MyMainAdapter extends RecyclerView.Adapter<MyMainAdapter.MyMainView
                     Toast.makeText(v.getContext(), "You liked " + title, Toast.LENGTH_SHORT).show();
                     card.setIsLiked(liked);
                     //can't add to a null object
-                    likes.add(username);
+                    likes.add(myUsername);
                     card.setLikes(likes);
                     myRef.child(card.getKey()).setValue(card);
                 }

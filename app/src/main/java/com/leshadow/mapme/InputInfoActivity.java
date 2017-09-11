@@ -1,7 +1,6 @@
 package com.leshadow.mapme;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,9 +14,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class InputInfoActivity extends AppCompatActivity {
 
@@ -59,15 +55,12 @@ public class InputInfoActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(InputInfoActivity.this, UserViewActivity.class);
                     intent.putExtra("username", card.getUsername());
+                    intent.putExtra("myUsername", card.getUsername());
                     intent.putExtra("trip", card.getTrip());
                     startActivity(intent);
                     finish();
                 }
-
             }
         });
-
-
-
     }
 }

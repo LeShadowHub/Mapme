@@ -44,16 +44,18 @@ public class UserMainViewActivity extends AppCompatActivity {
     //toolbar
     private Toolbar toolbar;
 
-    String username;
+    String myUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_main_view);
 
+        myUsername = getIntent().getStringExtra("myUsername");
+
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("All Trips");
+        getSupportActionBar().setTitle(myUsername + "'s Journey");
 
         recyclerViewMain = (RecyclerView) findViewById(R.id.recyclerViewMain);
         recyclerViewMain.setHasFixedSize(true);
@@ -62,12 +64,10 @@ public class UserMainViewActivity extends AppCompatActivity {
         pd = new ProgressDialog(this);
         cards = new ArrayList<>();
 
-        username = getIntent().getStringExtra("username");
-
         //displaying progress dialog while fetching images
         pd.setMessage("Please wait...");
         pd.show();
-        mDatabase = FirebaseDatabase.getInstance().getReference(username + "/AllTrips");
+        mDatabase = FirebaseDatabase.getInstance().getReference(myUsername + "/AllTrips");
 
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -81,7 +81,7 @@ public class UserMainViewActivity extends AppCompatActivity {
                 }
 
                 //creating adapter
-                adapter = new MyMainAdapter(getApplicationContext(), cards, username);
+                adapter = new MyMainAdapter(getApplicationContext(), cards, myUsername);
 
                 //adding adapter to recyclerView
                 recyclerViewMain.setAdapter(adapter);
@@ -103,13 +103,22 @@ public class UserMainViewActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(UserMainViewActivity.this, PublicViewActivity.class);
+        intent.putExtra("myUsername", myUsername);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int res_id = item.getItemId();
         switch (res_id){
             case R.id.action_add:
                 Intent intent = new Intent(UserMainViewActivity.this, InputTripInfoActivity.class);
-                intent.putExtra("username", username);
+                intent.putExtra("myUsername", myUsername);
                 startActivity(intent);
+                finish();
                 return true;
             case R.id.action_edit:
                 return true;

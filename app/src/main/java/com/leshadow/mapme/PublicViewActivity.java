@@ -42,7 +42,7 @@ public class PublicViewActivity extends AppCompatActivity {
     //toolbar
     private Toolbar toolbar;
 
-    String username;
+    String myUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +60,7 @@ public class PublicViewActivity extends AppCompatActivity {
         pd = new ProgressDialog(this);
         cards = new ArrayList<>();
 
-        username = getIntent().getStringExtra("username");
+        myUsername = getIntent().getStringExtra("myUsername");
 
         //displaying progress dialog while fetching images
         pd.setMessage("Please wait...");
@@ -79,7 +79,7 @@ public class PublicViewActivity extends AppCompatActivity {
                 }
 
                 //creating adapter
-                adapter = new MyMainAdapter(getApplicationContext(), cards, username);
+                adapter = new PublicAdapter(getApplicationContext(), cards, myUsername);
 
                 //adding adapter to recyclerView
                 recyclerViewMain.setAdapter(adapter);
@@ -95,7 +95,7 @@ public class PublicViewActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main, menu);
+        menuInflater.inflate(R.menu.menu_public, menu);
 
         return true;
     }
@@ -104,11 +104,9 @@ public class PublicViewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int res_id = item.getItemId();
         switch (res_id){
-            case R.id.action_add:
-                return true;
             case R.id.action_edit:
                 Intent intent = new Intent(PublicViewActivity.this, UserMainViewActivity.class);
-                intent.putExtra("username", username);
+                intent.putExtra("myUsername", myUsername);
                 startActivity(intent);
                 return true;
             case R.id.action_search:

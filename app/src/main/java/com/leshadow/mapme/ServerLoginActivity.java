@@ -60,7 +60,7 @@ public class ServerLoginActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(ServerLoginActivity.this, PublicViewActivity.class);
                                 //intent.putExtra("name", name);
-                                intent.putExtra("username", username);
+                                intent.putExtra("myUsername", username);
                                 //intent.putExtra("age", age);
 
                                 startActivity(intent);

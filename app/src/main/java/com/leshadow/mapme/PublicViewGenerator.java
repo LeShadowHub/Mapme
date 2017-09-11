@@ -46,7 +46,7 @@ public class PublicViewGenerator {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
                 users = dataSnapshot.getValue(t);
-                Log.d("CHECKING FIRST", users.toString());
+                //Log.d("CHECKING FIRST", users.toString());
                 generateWall(users);
             }
 
@@ -59,8 +59,8 @@ public class PublicViewGenerator {
 
     public void generateWall(List<String> users){
 
-        Log.d("CHECKING", "GENERATEWALL REACHED");
-        Log.d("CHECKING SECOND", users.toString());
+        //Log.d("CHECKING", "GENERATEWALL REACHED");
+        //Log.d("CHECKING SECOND", users.toString());
 
         final int[] remaining = {users.size()};
 
