@@ -12,34 +12,33 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The PublicViewActivity displays trips from all Users based on the rating for the trip
+ */
 public class PublicViewActivity extends AppCompatActivity {
 
-    //recyclerview object
+    // Recyclerview object
     private RecyclerView recyclerViewMain;
 
-    //adapter object
+    // Adapter object
     private RecyclerView.Adapter adapter;
 
-    //database reference
+    // Database reference
     private DatabaseReference mDatabase;
 
-    //progress dialog
     private ProgressDialog pd;
 
-    //list to hold all the uploaded cards;
+    // List to hold all the uploaded cards;
     private List<CardModel> cards;
 
-    //toolbar
     private Toolbar toolbar;
 
     String myUsername;
@@ -62,7 +61,7 @@ public class PublicViewActivity extends AppCompatActivity {
 
         myUsername = getIntent().getStringExtra("myUsername");
 
-        //displaying progress dialog while fetching images
+        // Displaying progress dialog while fetching images
         pd.setMessage("Please wait...");
         pd.show();
         mDatabase = FirebaseDatabase.getInstance().getReference("PublicWall");
@@ -72,16 +71,16 @@ public class PublicViewActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 pd.dismiss();
 
-                //iterating through all values in database
+                // Iterating through all values in database
                 for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
                     CardModel card = postSnapshot.getValue(CardModel.class);
                     cards.add(card);
                 }
 
-                //creating adapter
+                // Creating adapter
                 adapter = new PublicAdapter(getApplicationContext(), cards, myUsername);
 
-                //adding adapter to recyclerView
+                // Adding adapter to recyclerView
                 recyclerViewMain.setAdapter(adapter);
             }
 

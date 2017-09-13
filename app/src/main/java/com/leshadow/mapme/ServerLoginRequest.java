@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Login request for ServerLoginActivity
  * Created by OEM on 6/24/2017.
  */
-
 public class ServerLoginRequest extends StringRequest{
     //private static final String LOGIN_REQUEST_URL = "http://192.168.2.102:801/mapme2/Login.php";
     private static final String LOGIN_REQUEST_URL = "https://leshadow.com/Login.php";

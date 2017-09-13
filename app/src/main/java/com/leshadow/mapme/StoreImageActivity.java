@@ -36,6 +36,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+/**
+ * The StoreImageActivity allows the user to select an image, upload to online storage, map the image
+ * and view all uploaded images
+ */
 public class StoreImageActivity extends AppCompatActivity {
     Button chooseImg, uploadImg, mapImg, viewImg;
     ImageView imgView, imgView2;
@@ -53,12 +57,12 @@ public class StoreImageActivity extends AppCompatActivity {
 
     boolean firstImage = false;
 
-    //creating reference to firebase storage
+    // Creating reference to firebase storage
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef;
     //StorageReference storageRef = storage.getReferenceFromUrl("gs://projectweb-92615.appspot.com"); //change the url according to your firebase app
 
-    //creating reference to firebase database
+    // Creating reference to firebase database
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef;
     DatabaseReference allRef;
@@ -85,7 +89,7 @@ public class StoreImageActivity extends AppCompatActivity {
         pd = new ProgressDialog(this);
         pd.setTitle("Uploading");
 
-        //Check for First Image of each trip to upload to AllTrips
+        // Check for First Image of each trip to upload to AllTrips
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -101,7 +105,7 @@ public class StoreImageActivity extends AppCompatActivity {
             }
         });
 
-
+        // Return to User page to view all uploaded images
         viewImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,6 +118,7 @@ public class StoreImageActivity extends AppCompatActivity {
             }
         });
 
+        // Map current image selected by the user
         mapImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,6 +132,7 @@ public class StoreImageActivity extends AppCompatActivity {
             }
         });
 
+        // Allows user to choose an image from local storage
         chooseImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,6 +143,7 @@ public class StoreImageActivity extends AppCompatActivity {
             }
         });
 
+        // Allows user to upload the image chosen to online storage
         uploadImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,7 +153,7 @@ public class StoreImageActivity extends AppCompatActivity {
 
                     StorageReference childRef = storageRef.child(System.currentTimeMillis() + "." + getFileExtension(filePath));
 
-                    //Compress and upload the image
+                    // Compress and upload the image
                     Bitmap bmp = null;
                     try {
                         bmp = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
@@ -182,7 +189,7 @@ public class StoreImageActivity extends AppCompatActivity {
                             }
                             myRef.child(uploadId).setValue(card);
 
-                            //Place first card into list of main trip view
+                            // Place first card into list of main trip view
                             if(firstImage){
                                 uploadId = allRef.push().getKey();
                                 card.setKey(uploadId);
@@ -203,7 +210,7 @@ public class StoreImageActivity extends AppCompatActivity {
                     }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            //displaying upload progress
+                            // Displaying upload progress
                             double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                             pd.setMessage("Uploaded " + ((int)progress) + "%...");
                         }
@@ -223,7 +230,7 @@ public class StoreImageActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             filePath = data.getData();
 
-            //Getting lat and long
+            // Getting lat and long
             try {
                 InputStream inputStream = getContentResolver().openInputStream(filePath);
                 ExifInterface exifInterface = new ExifInterface(inputStream);
@@ -247,10 +254,10 @@ public class StoreImageActivity extends AppCompatActivity {
 
 
             try {
-                //getting image from gallery
+                // Getting image from gallery
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
 
-                //Setting image to ImageView
+                // Setting image to ImageView
                 imgView.setImageBitmap(bitmap);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -258,7 +265,11 @@ public class StoreImageActivity extends AppCompatActivity {
         }
     }
 
-    //Getting type of image(.jpg, .png, etc)
+    /**
+     * This method gets the type of image(.jpg, .png, etc)
+     * @param uri
+     * @return
+     */
     public String getFileExtension(Uri uri){
         ContentResolver cr = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();

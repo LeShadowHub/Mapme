@@ -40,6 +40,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * The TripActivity is testing custom implementation of image gallery
+ * Not used in MapMe
+ */
 public class TripActivity extends AppCompatActivity {
 
     public static final String IMAGES_FILE = "SavedImages";
@@ -52,7 +56,7 @@ public class TripActivity extends AppCompatActivity {
         setContentView(R.layout.activity_trip);
         ListView imageGallery = (ListView) findViewById(R.id.ImageGallery);
 
-        //Retrive previoiusly selected images
+        // Retrieve previously selected images
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Uri.class, new UriDeserializer())
                 .create();
@@ -81,8 +85,6 @@ public class TripActivity extends AppCompatActivity {
             Log.d("Original Uri", images.toString());
             imageUrls = new String[images.size()];
 
-
-            //Log.d("Check", images.toString());
             for(int i = 0; i < images.size(); i++){
                 imageUrls[i] = images.get(i).toString();
             }
@@ -92,7 +94,6 @@ public class TripActivity extends AppCompatActivity {
         } catch(Exception e){
             e.printStackTrace();
         }
-
 
         //images = getIntent().getParcelableArrayListExtra("Images");
         //addImagesToScrollView();
@@ -107,8 +108,6 @@ public class TripActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(IMAGES_FILE, jsonText);
         editor.apply();
-
-        Log.d("Stop", "Reached onStop");
         super.onStop();
     }
 
@@ -173,7 +172,7 @@ public class TripActivity extends AppCompatActivity {
     public View getImageView(Bitmap image){
         ImageView imageView = new ImageView((getApplicationContext()));
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(1,0,1,10);
+        lp.setMargins(1, 0, 1, 10);
         imageView.setLayoutParams(lp);
         imageView.setImageBitmap(image);
         return imageView;

@@ -30,6 +30,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * The LoginSuccessActivity takes user to user area once login is successful from LoginAccountActivity
+ * Not used in MapMe
+ */
 public class LoginSuccessActivity extends AppCompatActivity {
 
     private static final int SELECT_PHOTO = 100;
@@ -41,7 +45,7 @@ public class LoginSuccessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_success);
 
-        //To hide AppBar
+        // To hide AppBar
         ActionBar ab = getSupportActionBar();
         ab.hide();
 
@@ -59,7 +63,7 @@ public class LoginSuccessActivity extends AppCompatActivity {
         txtname.setText("Welcome, " + loginName);
         txtemail.setText(loginEmail);
 
-        //Retrieve Profile picture if exist
+        // Retrieve Profile picture if exist
         String imagePath = getImagePath();
         if(imagePath != null && imagePath.length() != 0){
             Bitmap savedImage = BitmapFactory.decodeFile(imagePath);
@@ -98,7 +102,7 @@ public class LoginSuccessActivity extends AppCompatActivity {
             }
         });
 
-        //Section for Changing Display Image when Clicked
+        // Section for Changing Display Image when Clicked
         dpImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +113,6 @@ public class LoginSuccessActivity extends AppCompatActivity {
         });
     }
 
-    //Method call when user picks an image from ImagePicker
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent){
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
@@ -130,7 +133,10 @@ public class LoginSuccessActivity extends AppCompatActivity {
         }
     }
 
-    //Save image to file in internal storage and store filepath in database
+    /**
+     * This method saves an image to file in internal storage and store filepath in database
+     * @param image
+     */
     public void updateProfileImage(Bitmap image){
         SQLiteOpenHelper dbhelper = new SQLiteDBHelper(this);
         SQLiteDatabase db = dbhelper.getWritableDatabase();
@@ -153,7 +159,7 @@ public class LoginSuccessActivity extends AppCompatActivity {
         ContentValues values = new ContentValues();
         values.put(SQLiteDBHelper.COLUMN_IMAGE, imagePath);
 
-        //Which row to update
+        // Which row to update
         String selection = SQLiteDBHelper.COLUMN_ID + " =?";
         String[] selectionArgs = {String.valueOf(id)};
         db.update(SQLiteDBHelper.TABLE_NAME, values, selection, selectionArgs);
@@ -161,7 +167,10 @@ public class LoginSuccessActivity extends AppCompatActivity {
         Toast.makeText(LoginSuccessActivity.this, "Image Saved", Toast.LENGTH_SHORT).show();
     }
 
-    //Retrieve file path from database
+    /**
+     * This method retrieves file path from database
+     * @return
+     */
     private String getImagePath(){
         SQLiteOpenHelper openHelper = new SQLiteDBHelper(this);
         SQLiteDatabase db = openHelper.getReadableDatabase();
@@ -179,6 +188,9 @@ public class LoginSuccessActivity extends AppCompatActivity {
         return imagePath;
     }
 
+    /**
+     * This method Deletes user profile and related data from database
+     */
     public void deleteProfile(){
         String imagePath = getImagePath();
         boolean deleteProfile = false;
@@ -202,7 +214,12 @@ public class LoginSuccessActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    //Method for decoding image for Out of Memory Exception
+    /**
+     * This method is for decoding image for Out of Memory Exception
+     * @param selectedImage
+     * @return
+     * @throws FileNotFoundException
+     */
     private Bitmap decodeUri(Uri selectedImage) throws FileNotFoundException{
         // Decode image size
         BitmapFactory.Options o = new BitmapFactory.Options();

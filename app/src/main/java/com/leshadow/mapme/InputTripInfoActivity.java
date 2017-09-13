@@ -8,6 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * The InputTripInfoActivity allows user to enter the main title for a certain trip
+ */
 public class InputTripInfoActivity extends AppCompatActivity {
 
     String myUsername;
@@ -22,6 +25,7 @@ public class InputTripInfoActivity extends AppCompatActivity {
 
         myUsername = getIntent().getStringExtra("myUsername");
 
+        // Saves the Title of the entire trip
         btnSaveTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

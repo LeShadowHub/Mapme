@@ -19,9 +19,9 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Created by OEM on 7/21/2017.
+ * The PublicViewGenerator generates the public wall by crawling through the database for
+ * all images and sorting by the ratings of the trips
  */
-
 public class PublicViewGenerator {
     //creating reference to firebase storage
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -36,10 +36,9 @@ public class PublicViewGenerator {
     List<String> users = new ArrayList<String>();
     List<CardModel> allCards = new ArrayList<CardModel>();
 
-    public void queryPublicView(){
-
-    }
-
+    /**
+     * This method crawls through all the users currently having accounts
+     */
     public void generateUsers(){
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -57,10 +56,11 @@ public class PublicViewGenerator {
         });
     }
 
+    /**
+     * This method generates the images based on ratings
+     * @param users
+     */
     public void generateWall(List<String> users){
-
-        //Log.d("CHECKING", "GENERATEWALL REACHED");
-        //Log.d("CHECKING SECOND", users.toString());
 
         final int[] remaining = {users.size()};
 
@@ -74,11 +74,10 @@ public class PublicViewGenerator {
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                     if(dataSnapshot.exists()){
-                        //iterating through all values in database
+                        // Iterating through all values in database
                         for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
                             CardModel card = postSnapshot.getValue(CardModel.class);
                             allCards.add(card);
-                            //Log.d("CHECKING THIRD", allCards.toString());
                         }
                     }
                     if(--remaining[0] == 0){
@@ -95,6 +94,10 @@ public class PublicViewGenerator {
 
     }
 
+    /**
+     * Helper method for comparing ratings
+     * @param allCards
+     */
     public void sortCards(List<CardModel> allCards){
         Collections.sort(allCards, new Comparator<CardModel>() {
             @Override
@@ -102,13 +105,16 @@ public class PublicViewGenerator {
                 return o2.getIsLiked()-o1.getIsLiked();
             }
         });
-        //Log.d("CHECKING FOURTH", allCards.toString());
         for(int i = 0; i < allCards.size(); i++){
             String uploadId = publicWall.push().getKey();
             publicWall.child(uploadId).setValue(allCards.get(i));
         }
     }
 
+    /**
+     * This method adds new User to list of Users in database
+     * @param username
+     */
     public void generateUsers(final String username){
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

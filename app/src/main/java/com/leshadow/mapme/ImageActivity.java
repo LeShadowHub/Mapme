@@ -24,6 +24,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * The ImageActivity allows user to select an image and extracts the EXIF data from the image
+ */
 public class ImageActivity extends AppCompatActivity {
 
     public static final int IMAGE_GALLERY_REQUEST = 20;
@@ -34,7 +37,7 @@ public class ImageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
 
-        // gt a reference to the image view that holds the image that the user will see
+        // Get a reference to the image view that holds the image that the user will see
         imgPicture = (ImageView) findViewById(R.id.imgPicture);
 
 
@@ -48,20 +51,25 @@ public class ImageActivity extends AppCompatActivity {
         // Invoke the image gallery using implicit intent
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
 
-        // where do we want to find the data
+        // Where to find the data
         File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         String pictureDirectoryPath = pictureDirectory.getPath();
-        // get a URI representation
+        // Get a URI representation
         Uri data = Uri.parse(pictureDirectoryPath);
 
-        // set the data and type. Get all image types
+        // Set the data and type. Get all image types
         photoPickerIntent.setDataAndType(data, "image/*");
 
-        // we will invoke this activity and get something back from it
+        // Invoke this activity and get something back from it
         startActivityForResult(photoPickerIntent, IMAGE_GALLERY_REQUEST);
 
     }
 
+    /**
+     * This method retrieves the file path of an image
+     * @param contentUri
+     * @return
+     */
     private String getRealPathFromURI(Uri contentUri) {
         String[] proj = { MediaStore.Images.Media.DATA };
         CursorLoader loader = new CursorLoader(this, contentUri, proj, null, null, null);
@@ -74,27 +82,27 @@ public class ImageActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK){
-            // if we are here, everything processed successfully.
+            // Everything processed successfully.
             if(requestCode == IMAGE_GALLERY_REQUEST){
-                // if we are here, we are hearing back from the image gallery
+                // Hearing back from the image gallery
 
-                // the address of the image on the SD Card
+                // The address of the image on the SD Card
                 Uri imageUri = data.getData();
 
-                // declare a stream to read the image data from the SD Card
+                // Declare a stream to read the image data from the SD Card
                 InputStream inputStream = null;
 
-                // we are getting an input stream, based on the URI of the image
+                // Getting an input stream, based on the URI of the image
                 try {
                     inputStream = getContentResolver().openInputStream(imageUri);
 
-                    // get a bitmap from the stream
+                    // Get a bitmap from the stream
                     //Bitmap image = BitmapFactory.decodeStream(inputStream);
 
-                    // show the image to the user
+                    // Show the image to the user
                     //imgPicture.setImageBitmap(image);
 
-                    // working with Exif
+                    // Working with Exif
                     //String imagePath = getRealPathFromURI(imageUri);
                     ExifInterface exifInterface = new ExifInterface(inputStream);
                     //String lat = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
@@ -127,7 +135,7 @@ public class ImageActivity extends AppCompatActivity {
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
-                    // show a message to the user indicating the image is unavailable
+                    // Show a message to the user indicating the image is unavailable
                     Toast.makeText(this, "Unable to open image", Toast.LENGTH_LONG).show();
                 } catch (IOException e) {
                     // Handle any errors

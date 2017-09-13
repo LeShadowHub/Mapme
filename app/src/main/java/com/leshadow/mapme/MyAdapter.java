@@ -1,8 +1,5 @@
 package com.leshadow.mapme;
 
-/**
- * Created by OEM on 7/14/2017.
- */
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -28,12 +25,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Custom Adapter used in UserViewActivity to display all images in a CardView
+ * Created by OEM on 7/14/2017.
+ */
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
 
     private Context context;
     private List<CardModel> cards;
     private String myUsername;
-    //creating reference to firebase database
+
+    // Creating reference to firebase database
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef;
 
@@ -56,25 +58,24 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
         final CardModel card = cards.get(position);
         holder.titleTextView.setText(card.getTitle());
 
-        //Disallow edits if not user
+        // Disallow edits if not user
         if(!card.getUsername().equals(myUsername)){
             holder.settingView.setVisibility(View.GONE);
-        } /*else{
-            holder.likeImageView.setVisibility(View.GONE);
-        }*/
+        }
 
-        //Set Like if user liked the photo before
+        // Set Like if user liked the photo before
         if(card.getLikes() != null) {
             if (card.getLikes().contains(myUsername)) {
                 holder.likeImageView.setImageResource(R.drawable.ic_liked);
             }
         }
+
         Glide.with(context)
                 .load(card.getImage())
                 //.thumbnail(0.5f)
                 .into(holder.coverImageView);
 
-        //Handle image click
+        // Handle image click
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +87,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
             }
         });
 
-        //Change Title and Desc of image
+        // Change Title and Desc of image
         holder.settingView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +97,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
             }
         });
 
-        //Like Button Click
+        // Like Button Click
         holder.likeImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

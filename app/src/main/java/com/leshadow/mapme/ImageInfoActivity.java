@@ -34,6 +34,10 @@ import com.koushikdutta.ion.Ion;
 
 import java.util.NoSuchElementException;
 
+/**
+ * The ImageInfoActivity displays the image in a CardView and takes the latitude and Longitude prev
+ * found to draw a pointer on Google Maps
+ */
 public class ImageInfoActivity extends AppCompatActivity implements OnMapReadyCallback {
     CardModel card;
     private GoogleMap mMap;
@@ -76,7 +80,7 @@ public class ImageInfoActivity extends AppCompatActivity implements OnMapReadyCa
         image_title.setText(card.getTitle());
         image_details.setText(card.getDesc());
 
-        //Getting height of the screen
+        // Getting height of the screen
         Display display = getWindowManager().getDefaultDisplay();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             display.getRealSize(size);
@@ -86,7 +90,7 @@ public class ImageInfoActivity extends AppCompatActivity implements OnMapReadyCa
             height = display.getHeight();
         }
 
-
+        // Collapse image to view full map
         btnCollapse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +107,7 @@ public class ImageInfoActivity extends AppCompatActivity implements OnMapReadyCa
             }
         });
 
+        // Expand image
         btnExpand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,6 +125,11 @@ public class ImageInfoActivity extends AppCompatActivity implements OnMapReadyCa
         });
     }
 
+    /**
+     * This method scales an image to given ImageView
+     * @param view
+     * @throws NoSuchElementException
+     */
     private void scaleImage(ImageView view) throws NoSuchElementException {
         // Get bitmap from the the ImageView.
         Bitmap bitmap = null;
@@ -134,7 +144,7 @@ public class ImageInfoActivity extends AppCompatActivity implements OnMapReadyCa
             bitmap = Ion.with(view).getBitmap();
         }
 
-        // Get current dimensions AND the desired bounding box
+        // Get current dimensions and the desired bounding box
         int width = 0;
 
         try {
@@ -149,9 +159,9 @@ public class ImageInfoActivity extends AppCompatActivity implements OnMapReadyCa
         Log.i("Test", "original height = " + Integer.toString(height));
         Log.i("Test", "bounding = " + Integer.toString(bounding));
 
-        // Determine how much to scale: the dimension requiring less scaling is
-        // closer to the its side. This way the image always stays inside your
-        // bounding box AND either x/y axis touches it.
+        // Determine how much to scale by: the dimension requiring less scaling is
+        // closer to the side. This way the image always stays inside the
+        // bounding box and either x/y axis touches it.
         float xScale = ((float) bounding) / width;
         float yScale = ((float) bounding) / height;
         float scale = (xScale <= yScale) ? xScale : yScale;
@@ -174,7 +184,7 @@ public class ImageInfoActivity extends AppCompatActivity implements OnMapReadyCa
         // Apply the scaled bitmap
         view.setImageDrawable(result);
 
-        // Now change ImageView's dimensions to match the scaled image
+        // Change ImageView's dimensions to match the scaled image
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
         params.width = width;
         params.height = height;
@@ -183,6 +193,11 @@ public class ImageInfoActivity extends AppCompatActivity implements OnMapReadyCa
         Log.i("Test", "done");
     }
 
+    /**
+     * This method converts dp to px
+     * @param dp
+     * @return
+     */
     private int dpToPx(int dp) {
         float density = getApplicationContext().getResources().getDisplayMetrics().density;
         return Math.round((float)dp * density);
@@ -191,6 +206,8 @@ public class ImageInfoActivity extends AppCompatActivity implements OnMapReadyCa
     @Override
     public void onMapReady(GoogleMap map){
         mMap = map;
+
+        // There is a bug with adjusting the bounds of a map
 
         //mMap.setPadding(0,height,0,0);
         //RelativeLayout mapLayout = (RelativeLayout)findViewById(R.id.mapLayout);

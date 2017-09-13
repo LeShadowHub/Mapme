@@ -15,13 +15,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+/**
+ * The InputInfoActivity allows user to add title and description to individual images
+ */
 public class InputInfoActivity extends AppCompatActivity {
 
-    //creating reference to firebase storage
+    // Creating reference to firebase storage
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
 
-    //creating reference to firebase database
+    // Creating reference to firebase database
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef;
 
@@ -41,6 +44,7 @@ public class InputInfoActivity extends AppCompatActivity {
         card = (CardModel)getIntent().getSerializableExtra("CardObj");
         myRef = database.getReference(card.getUsername() + "/" + card.getTrip());
 
+        // Saves the Title and Description of an image
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

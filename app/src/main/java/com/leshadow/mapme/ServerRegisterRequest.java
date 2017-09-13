@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Register request for ServerRegisterActivity
  * Created by OEM on 6/24/2017.
  */
-
 public class ServerRegisterRequest extends StringRequest{
     //private static final String REGISTER_REQUEST_URL = "http://192.168.2.102:801/mapme2/Register.php";
     private static final String REGISTER_REQUEST_URL = "https://leshadow.com/Register.php";

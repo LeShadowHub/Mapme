@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+/**
+ * The ServerUserAreaActivity is a test for successful login for ServerLoginActivity
+ */
 public class ServerUserAreaActivity extends AppCompatActivity {
 
     @Override

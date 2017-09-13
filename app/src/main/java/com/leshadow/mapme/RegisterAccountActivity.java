@@ -13,6 +13,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+/**
+ * The RegisterAccountActivity registers new user using SQLite Database
+ * Not used in MapMe
+ */
 public class RegisterAccountActivity extends AppCompatActivity {
 
     SQLiteOpenHelper openHelper;
@@ -23,20 +27,19 @@ public class RegisterAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_account);
 
-        //To hide AppBar for fullscreen.
         ActionBar ab = getSupportActionBar();
         ab.hide();
 
         openHelper = new SQLiteDBHelper(this);
 
-        //Referencing EditText Widgets and Button placed inside xml
+        // Referencing EditText Widgets and Button placed inside xml
         final EditText txtfullname = (EditText) findViewById(R.id.txtname_reg);
         final EditText txtemail = (EditText) findViewById(R.id.txtemail_reg);
         final EditText txtpass = (EditText) findViewById(R.id.txtpass_reg);
         final EditText txtmobile = (EditText) findViewById(R.id.txtmobile_reg);
         Button btnreg = (Button) findViewById(R.id.btn_reg);
 
-        //Register Button Click Event
+        // Register Button Click Event
         btnreg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,10 +50,10 @@ public class RegisterAccountActivity extends AppCompatActivity {
                 String pass = txtpass.getText().toString();
                 String mobile = txtmobile.getText().toString();
 
-                //Calling InsertData Method
+                // Calling InsertData Method
                 insertData(fullname, email, pass, mobile);
 
-                //Alert dialong fter clicking the Register Account
+                // Alert dialong fter clicking the Register Account
                 final AlertDialog.Builder builder = new AlertDialog.Builder(RegisterAccountActivity.this);
                 builder.setTitle("Information");
                 builder.setMessage("Your Account is Successfullly Created.");
@@ -67,7 +70,7 @@ public class RegisterAccountActivity extends AppCompatActivity {
         });
     }
 
-    //Inserting Data into database (Like INSERT INTO QUERY)
+    // Inserting Data into database (Like INSERT INTO QUERY)
     public void insertData(String fullName, String email, String password, String mobile){
         ContentValues values = new ContentValues();
         values.put(SQLiteDBHelper.COLUMN_FULLNAME, fullName);

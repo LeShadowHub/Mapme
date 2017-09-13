@@ -29,6 +29,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+/**
+ * The MainImagesActivity is used for testing image EXIF extraction and file paths of internal storage
+ * Not used in MapMe
+ */
 public class MainImagesActivity extends AppCompatActivity {
 
     public static final int IMAGE_GALLERY_REQUEST = 20;
@@ -39,6 +43,7 @@ public class MainImagesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_images);
     }
+
     /**
      * This method is invoked when the user click upload button
      * @param v
@@ -47,19 +52,19 @@ public class MainImagesActivity extends AppCompatActivity {
         // Invoke the image gallery using implicit intent
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
 
-        // where do we want to find the data
+        // Where to find the data
         File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         String pictureDirectoryPath = pictureDirectory.getPath();
-        // get a URI representation
+        // Get a URI representation
         Uri data = Uri.parse(pictureDirectoryPath);
 
-        // set the data and type. Get all image types
+        // Set the data and type. Get all image types
         photoPickerIntent.setDataAndType(data, "image/*");
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
             photoPickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             photoPickerIntent.setAction(Intent.ACTION_GET_CONTENT);
-            // we will invoke this activity and get something back from it
+            // Invoke this activity and get something back from it
             startActivityForResult(Intent.createChooser(photoPickerIntent, "Select Photo"), IMAGE_GALLERY_REQUEST);
         } else{
             startActivityForResult(photoPickerIntent, IMAGE_GALLERY_REQUEST);
@@ -71,6 +76,11 @@ public class MainImagesActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * This method gets the actual file path for image
+     * @param contentUri
+     * @return
+     */
     private String getRealPathFromURI(Uri contentUri) {
         Cursor cursor = null;
         try {
@@ -96,9 +106,9 @@ public class MainImagesActivity extends AppCompatActivity {
         float[] latLong = new float[2];
 
         if(resultCode == RESULT_OK){
-            // if we are here, everything processed successfully.
+            // Everything processed successfully at this point
             if(requestCode == IMAGE_GALLERY_REQUEST){
-                // if we are here, we are hearing back from the image gallery
+                // Hearing back from the image gallery at this point
 
                 if(data != null) {
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
@@ -123,8 +133,8 @@ public class MainImagesActivity extends AppCompatActivity {
                                 }*/
                             }
 
-                            Intent tripIntent = new Intent(MainImagesActivity.this, TripActivity.class);
-                            tripIntent.putParcelableArrayListExtra("Images", imgUri);
+                            //Intent tripIntent = new Intent(MainImagesActivity.this, TripActivity.class);
+                            //tripIntent.putParcelableArrayListExtra("Images", imgUri);
                             //startActivity(tripIntent);
 
                         } else {
@@ -156,7 +166,7 @@ public class MainImagesActivity extends AppCompatActivity {
 
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
-                                // show a message to the user indicating the image is unavailable
+                                // Show a message to the user indicating the image is unavailable
                                 Toast.makeText(this, "Unable to open image", Toast.LENGTH_LONG).show();
                             } catch (IOException e) {
                                 e.printStackTrace();

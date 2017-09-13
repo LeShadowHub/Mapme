@@ -23,13 +23,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The ServerRegisterActivity allows users to register new accounts saved on online server
+ */
 public class ServerRegisterActivity extends AppCompatActivity {
 
-    //creating reference to firebase storage
+    // Creating reference to firebase storage
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef;
 
-    //creating reference to firebase database
+    // Creating reference to firebase database
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("AllUsers");
 
@@ -48,7 +51,6 @@ public class ServerRegisterActivity extends AppCompatActivity {
         final Button bRegister = (Button) findViewById(R.id.bRegister);
 
         //users = temp.generateView();
-        //Log.d("CHECKING LIST", users.toString());
 
         bRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +67,7 @@ public class ServerRegisterActivity extends AppCompatActivity {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
                             if(success){
+                                // Adds new user to list of all users
                                 //users.add(username);
                                 //myRef.setValue(users);
                                 temp.generateUsers(username);

@@ -4,10 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
+/** Custom Helper class for SQLite DB to sort rows and columns
  * Created by OEM on 6/21/2017.
  */
-
 public class SQLiteDBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "info.db";

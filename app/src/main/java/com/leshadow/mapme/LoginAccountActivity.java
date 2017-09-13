@@ -15,6 +15,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * The LoginAccountActivity is a Login option that uses SQLite database on local mobile device
+ * Not used in MapMe
+ */
 public class LoginAccountActivity extends AppCompatActivity {
 
     SQLiteOpenHelper dbhelper;
@@ -26,17 +30,17 @@ public class LoginAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_account);
 
-        //Hide AppBar for fullScreen
+        // Hide AppBar for fullScreen
         ActionBar ab = getSupportActionBar();
         ab.hide();
 
-        //Referencing UserEmail, Password EditText and TextView for Signup Now
+        // Referencing UserEmail, Password EditText and TextView for Signup Now
         final EditText txtemail = (EditText) findViewById(R.id.txtemail);
         final EditText txtpass = (EditText) findViewById(R.id.txtpass);
         Button btnlogin = (Button) findViewById(R.id.btnsignin);
         TextView btnreg = (TextView) findViewById(R.id.btnreg);
 
-        //Opening SQLite Pipeline
+        // Opening SQLite Pipeline
         dbhelper = new SQLiteDBHelper(this);
         db = dbhelper.getReadableDatabase();
 
@@ -51,7 +55,7 @@ public class LoginAccountActivity extends AppCompatActivity {
                 if(cursor != null){
                     if(cursor.getCount() > 0){
                         cursor.moveToFirst();
-                        //Retrieving User Fullname and Email after successfull login and passing to LoginSuccessActivity
+                        // Retrieving User Fullname and Email after successful login and passing to LoginSuccessActivity
                         String _fname = cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.COLUMN_FULLNAME));
                         String _email = cursor.getString(cursor.getColumnIndex(SQLiteDBHelper.COLUMN_EMAIL));
                         int _id = cursor.getInt(cursor.getColumnIndex(SQLiteDBHelper.COLUMN_ID));
@@ -62,10 +66,11 @@ public class LoginAccountActivity extends AppCompatActivity {
                         intent.putExtra("id", _id);
                         startActivity(intent);
 
-                        //Removing activity from the stack for preventing back button press
+                        // Removing activity from the stack for preventing back button press
                         finish();
+
                     } else{
-                        //Alert Dialog box for alerting user about wrong credentials
+                        // Alert Dialog box for alerting user about wrong credentials
                         final AlertDialog.Builder builder = new AlertDialog.Builder(LoginAccountActivity.this);
                         builder.setTitle("Alert");
                         builder.setMessage("Username or Passord is wrong.");
@@ -82,7 +87,7 @@ public class LoginAccountActivity extends AppCompatActivity {
             }
         });
 
-        //Intent for Opening RegisterAccountActivity
+        // Takes user to register page
         btnreg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

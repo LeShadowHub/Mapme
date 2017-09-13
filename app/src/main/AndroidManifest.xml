@@ -37,7 +37,6 @@
 
         <activity android:name=".MapActivity" />
         <activity android:name=".ImageActivity" />
-        <activity android:name=".CustomPhotoGalleryActivity" />
         <activity android:name=".MainImagesActivity" />
         <activity android:name=".TripActivity" />
         <activity android:name=".LoginAccountActivity" />

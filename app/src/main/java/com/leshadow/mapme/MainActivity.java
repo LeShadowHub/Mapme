@@ -24,11 +24,11 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Testing the auto generator for public wall that all users will see
         PublicViewGenerator temp = new PublicViewGenerator();
         //temp.generateUsers();
 
-        Log.d("Generation Completed", "CHECKING");
-
+        // Main entry into MapMe app
         if(login){
             Intent loginIntent = new Intent(MainActivity.this, ServerLoginActivity.class);
             startActivity(loginIntent);

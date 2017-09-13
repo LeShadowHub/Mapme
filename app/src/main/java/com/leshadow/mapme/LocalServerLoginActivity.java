@@ -24,6 +24,11 @@ import java.sql.BatchUpdateException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The LocalServerLoginActivity if a Login option that checks for user info from SQL database on
+ * localhost running local server with XAMPP
+ * Not used in MapMe
+ */
 public class LocalServerLoginActivity extends AppCompatActivity {
 
     private EditText email, password;
@@ -42,6 +47,7 @@ public class LocalServerLoginActivity extends AppCompatActivity {
         btnLogReg = (Button) findViewById(R.id.btnLogReg);
 
         requestQueue = Volley.newRequestQueue(this);
+
         btnLogReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

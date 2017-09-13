@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * Model for each individual card holding picture
  * Created by OEM on 7/12/2017.
  */
 

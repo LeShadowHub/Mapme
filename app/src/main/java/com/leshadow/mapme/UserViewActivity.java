@@ -25,24 +25,22 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+* The UserViewActivity displays all the images with a "Trip" submitted by individual User
+* Utilizes Custom Adapter to display images
+*/
 public class UserViewActivity extends AppCompatActivity {
 
-    //recyclerview object
+    // Recyclerview object
     private RecyclerView recyclerView;
 
-    //adapter object
+    // Adapter object
     private RecyclerView.Adapter adapter;
 
-    //database reference
+    // Database reference
     private DatabaseReference mDatabase;
-
-    //progress dialog
     private ProgressDialog pd;
-
-    //list to hold all the uploaded cards;
     private List<CardModel> cards;
-
-    //toolbar
     private Toolbar toolbar;
 
     String username;
@@ -75,7 +73,7 @@ public class UserViewActivity extends AppCompatActivity {
             invalidateOptionsMenu();
         }
 
-        //displaying progress dialog while fetching images
+        // Displaying progress dialog while fetching images
         pd.setMessage("Please wait...");
         pd.show();
         mDatabase = FirebaseDatabase.getInstance().getReference(username + "/" + trip);
@@ -85,16 +83,16 @@ public class UserViewActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 pd.dismiss();
 
-                //iterating through all values in database
+                // Iterating through all values in database
                 for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
                     CardModel card = postSnapshot.getValue(CardModel.class);
                     cards.add(card);
                 }
 
-                //creating adapter
+                // Creating adapter
                 adapter = new MyAdapter(getApplicationContext(), cards, myUsername);
 
-                //adding adapter to recyclerView
+                // Adding adapter to recyclerView
                 recyclerView.setAdapter(adapter);
             }
 

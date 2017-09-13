@@ -19,6 +19,9 @@ import com.bumptech.glide.Glide;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * The ServerLoginActivity is a Login option that users a online server database to verify users
+ */
 public class ServerLoginActivity extends AppCompatActivity {
 
     private boolean doubleBackToExitPressedOnce;
